@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "jess-voice-agent-poc",
+		"name": "Jess Voice Agent PoC",
+		"description": "Collection for testing Jess Voice Agent backend tools via Ngrok",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://6bbe6706adc5.ngrok-free.app",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1. Get Case Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+15551234567\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/tools/get-case-details",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tools",
+						"get-case-details"
+					]
+				},
+				"description": "Retrieves debt details for a customer (María González)"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Propose Payment Plan (Installments)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+15551234567\",\n    \"installments\": 3\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/tools/propose-payment-plan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tools",
+						"propose-payment-plan"
+					]
+				},
+				"description": "Calculates 3 monthly installments"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Propose Settlement (Discount)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+15551234567\",\n    \"offer_amount\": 400\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/tools/propose-payment-plan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tools",
+						"propose-payment-plan"
+					]
+				},
+				"description": "Validates a settlement offer of $400"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Update Status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+15551234567\",\n    \"new_status\": \"promised_to_pay\",\n    \"summary\": \"Customer agreed to pay in 3 installments starting next week\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/tools/update-status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tools",
+						"update-status"
+					]
+				},
+				"description": "Updates the call outcome in the database"
+			},
+			"response": []
+		}
+	]
+}
