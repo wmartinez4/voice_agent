@@ -10,9 +10,68 @@ from typing import Optional, List
 from datetime import datetime, timedelta
 from database import get_supabase_client
 import logging
+from logging.handlers import RotatingFileHandler
+import os
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging (similar to Serilog in .NET)
+# Creates logs in both console and file
+def setup_logging():
+    """
+    Configure logging with multiple outputs (console + file).
+    Similar to Serilog configuration in .NET.
+    """
+    # Create logs directory if it doesn't exist
+    os.makedirs("logs", exist_ok=True)
+    
+    # Define log format
+    log_format = logging.Formatter(
+        fmt='%(asctime)s | %(levelname)-8s | %(name)s | %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # Root logger configuration
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)  # Set root to INFO to avoid noise from libraries
+    
+    # Remove existing handlers to avoid duplicates
+    root_logger.handlers = []
+    
+    # Configure app logger separately for DEBUG
+    app_logger = logging.getLogger("main")
+    app_logger.setLevel(logging.DEBUG)
+    
+    # Handler 1: Console output (INFO level)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(log_format)
+    root_logger.addHandler(console_handler)
+    
+    # Handler 2: File output - General logs (DEBUG level)
+    file_handler = RotatingFileHandler(
+        filename=f"logs/app_{datetime.now().strftime('%Y%m%d')}.log",
+        maxBytes=10 * 1024 * 1024,  # 10MB per file
+        backupCount=5,  # Keep 5 backup files
+        encoding='utf-8'
+    )
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(log_format)
+    root_logger.addHandler(file_handler)
+    
+    # Handler 3: File output - Errors only (ERROR level)
+    error_handler = RotatingFileHandler(
+        filename=f"logs/errors_{datetime.now().strftime('%Y%m%d')}.log",
+        maxBytes=10 * 1024 * 1024,
+        backupCount=5,
+        encoding='utf-8'
+    )
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(log_format)
+    root_logger.addHandler(error_handler)
+    
+    return root_logger
+
+# Initialize logging
+setup_logging()
 logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
@@ -39,11 +98,20 @@ supabase = get_supabase_client()
 # REQUEST/RESPONSE MODELS
 # ============================================================================
 
+class GetCustomerNameRequest(BaseModel):
+    phone: str = Field(..., description="Customer phone number")
+
+
+class GetCustomerNameResponse(BaseModel):
+    customer_name: str = Field(..., description="Customer full name for identity confirmation")
+
+
 class GetCaseDetailsRequest(BaseModel):
     phone: str = Field(..., description="Customer phone number")
 
 
 class GetCaseDetailsResponse(BaseModel):
+    customer_name: str = Field(..., description="Customer full name")
     debt_amount: float = Field(..., description="Total debt amount")
     due_date: str = Field(..., description="Original due date")
     risk_level: str = Field(..., description="Risk level: low, medium, high")
@@ -120,6 +188,42 @@ async def health_check():
     }
 
 
+@app.post("/tools/get-customer-name", response_model=GetCustomerNameResponse)
+async def get_customer_name(request: GetCustomerNameRequest):
+    """
+    Retrieve ONLY the customer name for identity verification.
+    
+    PRIVACY-FIRST: This endpoint should be called BEFORE revealing any 
+    sensitive information. Use this to confirm you're speaking with the 
+    right person, then call get-case-details after confirmation.
+    """
+    logger.info(f"🔍 Getting customer name for phone: {request.phone}")
+    logger.debug(f"Request payload: {request.dict()}")
+    
+    try:
+        # Query customer from database
+        result = supabase.table('customers').select("name").eq('phone', request.phone).execute()
+        
+        if not result.data or len(result.data) == 0:
+            logger.warning(f"⚠️  Customer not found: {request.phone}")
+            raise HTTPException(status_code=404, detail="Customer not found")
+        
+        customer = result.data[0]
+        
+        response = GetCustomerNameResponse(
+            customer_name=customer['name']
+        )
+        
+        logger.info(f"✅ Customer name retrieved: {response.customer_name}")
+        return response
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error retrieving customer name: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
 @app.post("/tools/get-case-details", response_model=GetCaseDetailsResponse)
 async def get_case_details(request: GetCaseDetailsRequest):
     """
@@ -145,13 +249,14 @@ async def get_case_details(request: GetCaseDetailsRequest):
         days_overdue = calculate_days_overdue(customer['due_date'])
         
         response = GetCaseDetailsResponse(
+            customer_name=customer['name'],
             debt_amount=float(customer['debt_amount']),
             due_date=customer['due_date'],
             risk_level=customer['risk_level'],
             days_overdue=days_overdue
         )
         
-        logger.info(f"✅ Case details retrieved: ${response.debt_amount}, {days_overdue} days overdue")
+        logger.info(f"✅ Case details retrieved for {customer['name']}: ${response.debt_amount}, {days_overdue} days overdue")
         return response
         
     except HTTPException:
@@ -303,6 +408,7 @@ async def startup_event():
     logger.info("=" * 60)
     logger.info("📡 Endpoints available:")
     logger.info("   GET  /health")
+    logger.info("   POST /tools/get-customer-name (NEW - Privacy-first)")
     logger.info("   POST /tools/get-case-details")
     logger.info("   POST /tools/propose-payment-plan")
     logger.info("   POST /tools/update-status")

@@ -8,7 +8,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "https://6bbe6706adc5.ngrok-free.app",
+			"value": "https://daec0fa726f0.ngrok-free.app",
 			"type": "string"
 		}
 	],
@@ -31,7 +31,7 @@
 			"response": []
 		},
 		{
-			"name": "1. Get Case Details",
+			"name": "1. Get Customer Name (Privacy-First)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -42,7 +42,35 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"phone\": \"+15551234567\"\n}"
+					"raw": "{\n    \"phone\": \"+573124199685\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/tools/get-customer-name",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tools",
+						"get-customer-name"
+					]
+				},
+				"description": "Retrieves only customer name for identity verification BEFORE revealing debt info"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get Case Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phone\": \"+573124199685\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/tools/get-case-details",
@@ -54,12 +82,12 @@
 						"get-case-details"
 					]
 				},
-				"description": "Retrieves debt details for a customer (María González)"
+				"description": "Retrieves debt details for Willian Martinez AFTER identity confirmed"
 			},
 			"response": []
 		},
 		{
-			"name": "2. Propose Payment Plan (Installments)",
+			"name": "3. Propose Payment Plan (Installments)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -70,7 +98,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"phone\": \"+15551234567\",\n    \"installments\": 3\n}"
+					"raw": "{\n    \"phone\": \"+573124199685\",\n    \"installments\": 3\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/tools/propose-payment-plan",
@@ -82,12 +110,12 @@
 						"propose-payment-plan"
 					]
 				},
-				"description": "Calculates 3 monthly installments"
+				"description": "Calculates 3 monthly installments for Willian Martinez"
 			},
 			"response": []
 		},
 		{
-			"name": "3. Propose Settlement (Discount)",
+			"name": "4. Propose Settlement (Discount)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -98,7 +126,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"phone\": \"+15551234567\",\n    \"offer_amount\": 400\n}"
+					"raw": "{\n    \"phone\": \"+573124199685\",\n    \"offer_amount\": 530\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/tools/propose-payment-plan",
@@ -110,12 +138,12 @@
 						"propose-payment-plan"
 					]
 				},
-				"description": "Validates a settlement offer of $400"
+				"description": "Validates a settlement offer of $530 (80% of $664)"
 			},
 			"response": []
 		},
 		{
-			"name": "4. Update Status",
+			"name": "5. Update Status",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -126,7 +154,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"phone\": \"+15551234567\",\n    \"new_status\": \"promised_to_pay\",\n    \"summary\": \"Customer agreed to pay in 3 installments starting next week\"\n}"
+					"raw": "{\n    \"phone\": \"+573124199685\",\n    \"new_status\": \"promised_to_pay\",\n    \"summary\": \"Customer agreed to pay in 3 installments starting next week\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/tools/update-status",

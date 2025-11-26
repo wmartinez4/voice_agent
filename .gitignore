@@ -9,6 +9,7 @@ venv/
 ENV/
 .venv
 *.log
+logs/
 .DS_Store
 .idea/
 .vscode/
