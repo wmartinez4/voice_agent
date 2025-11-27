@@ -55,13 +55,17 @@ def make_call(phone_number: str, customer_name: str):
         payload["agent_phone_number_id"] = AGENT_PHONE_NUMBER_ID
     
     # Add custom variables for the conversation
-    # These can be referenced in the ElevenLabs prompt as {{customer_name}}
+    # These can be referenced in the ElevenLabs prompt and tools
     payload["conversation_config_override"] = {
         "agent": {
             "prompt": {
                 "prompt": f"You are Jess, calling {customer_name}. Use their name in the greeting."
             },
-            "first_message": f"Hi! <break time=\"0.3s\"/> I was hoping to catch {customer_name}? <break time=\"0.3s\"/> Is that you?"
+            "first_message": f"Hi! <break time=\"0.3s\"/> I was hoping to catch {customer_name}? <break time=\"0.3s\"/> Is that you?",
+            "dynamic_variables": {
+                "phone_number": phone_number,
+                "customer_name": customer_name
+            }
         }
     }
     

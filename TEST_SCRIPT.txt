@@ -1,0 +1,47 @@
+GUIÓN DE PRUEBA - JESS VOICE AGENT
+===================================
+
+PASO 1: Saludo
+--------------
+Jess: "Hi! This is Jess. Am I speaking with the account holder?"
+Tú:   "Yes, I am" o "Yes"
+
+PASO 2: Confirma Tu Nombre
+---------------------------
+Jess: "Perfect! Am I speaking with Willian Martinez?"
+Tú:   "Yes" o "That's me"
+
+PASO 3: Menciona la Deuda
+--------------------------
+Jess: "I'm calling about an outstanding balance of six hundred sixty-four dollars that is eight days overdue. Were you aware of this?"
+Tú:   "Yes" o "Tell me more"
+
+PASO 4: Propone Plan de Pagos
+------------------------------
+Jess: "Would you like me to check payment options for you?"
+Tú:   "Yes" o "Sure"
+
+PASO 5: Presenta el Plan
+-------------------------
+Jess: "I can offer you 3 monthly payments of two hundred twenty-one dollars. Does that work for you?"
+Tú:   "Yes, that works" o "I agree"
+
+PASO 6: Confirma y Cierra
+--------------------------
+Jess: "Perfect! I've noted this in your account. You'll receive a confirmation shortly. Have a great day!"
+Tú:   "Thank you" o "Goodbye"
+
+===================================
+DATOS ESPERADOS EN LA CONVERSACIÓN:
+- Nombre: Willian Martinez
+- Deuda: $664.00
+- Días: 8 días vencido
+- Plan: 3 pagos de $221.33
+===================================
+
+ENDPOINTS QUE DEBE LLAMAR:
+✅ get_customer_name (después del paso 1)
+✅ get_case_details (después del paso 2)
+✅ propose_payment_plan (después del paso 4)
+✅ update_status (después del paso 5)
+

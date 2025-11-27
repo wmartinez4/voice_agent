@@ -1,0 +1,45 @@
+FLUJO DE LLAMADA DE PRUEBA - JESS VOICE AGENT
+==============================================
+
+1. Saludo → "Am I speaking with the account holder?"
+2. Confirma nombre → "Am I speaking with [nombre real]?"
+3. Menciona deuda → "$664, 7 days overdue"
+4. Propone plan → "Would you like payment options?"
+5. Presenta plan → "3 payments of $221.33"
+6. Cierra → "Perfect! I've noted this..."
+
+
+
+Example:
+
+1. Jess llama y saluda:
+   "Hi! This is Jess. Am I speaking with the account holder?"
+   → Responder: "Yes, I am" o "Yes"
+
+2. Jess consulta tu nombre (llama a get_customer_name):
+   "Perfect! Am I speaking with [TU NOMBRE REAL]?"
+   → Responder: "Yes" o "That's me"
+
+3. Jess consulta la deuda (llama a get_case_details):
+   "I'm calling about an outstanding balance of [MONTO] dollars that is [DÍAS] days overdue. Were you aware of this?"
+   → Responder: "Yes" o "Tell me more"
+
+4. Jess propone plan de pagos (llama a propose_payment_plan):
+   "Would you like me to check payment options for you?"
+   → Responder: "Yes" o "Sure"
+
+5. Jess presenta el plan:
+   "I can offer you 3 monthly payments of [MONTO] dollars. Does that work for you?"
+   → Responder: "Yes, that works" o "I agree"
+
+6. Jess confirma y actualiza (llama a update_status):
+   "Perfect! I've noted this in your account. You'll receive a confirmation shortly. Have a great day!"
+
+==============================================
+DATOS ESPERADOS:
+- Nombre: Willian Martinez
+- Deuda: $664.00
+- Días vencido: 7 días
+- Plan: 3 pagos de $221.33
+==============================================
+
