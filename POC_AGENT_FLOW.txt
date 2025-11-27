@@ -1,0 +1,59 @@
+JESS VOICE AGENT - Proof of Concept
+====================================
+
+WHAT IS JESS?
+AI-powered voice agent for empathetic debt collection. Sounds like a real person, NOT a traditional collector. Calls customers, verifies identity, negotiates flexible payment plans, and logs results automatically.
+
+POC SCOPE
+✅ Privacy-first identity verification (name confirmation before revealing debt)
+✅ Natural, empathetic conversation (no pressure or corporate language)
+✅ Automated payment plan negotiation (2-4 installments or discounts)
+✅ Real-time API integration (Supabase + FastAPI + ElevenLabs + Twilio)
+✅ Automatic call outcome logging
+
+HOW IT WORKS (Happy Path)
+1. Jess calls → Casual greeting
+2. Confirms identity with real name (no debt info yet)
+3. Mentions specific debt: amount & days overdue
+4. Customer can't pay all → Jess offers installment plan/discount
+5. Customer accepts → Jess confirms & promises SMS
+6. Logs commitment to database & says goodbye
+Natural 1-2 min conversation. No pressure.
+
+
+CONVERSATION EXAMPLE
+--------------------
+Jess: "Hi! Am I speaking with Willian Martinez?"
+Customer: "Yes"
+Jess: "I'm calling about an outstanding balance of $664 from 7 days ago. Were you aware?"
+Customer: "Yes, but I can't pay it all now"
+Jess: "I understand. We can divide it. Would 2, 3, or 4 payments work better?"
+Customer: "3 would work"
+Jess: "Perfect, $221.33 each. What dates work for you?"
+Customer: "The 25th monthly"
+Jess: "Excellent. I'll send confirmation. Thank you!"
+Result: Committed to 3 payments. Logged automatically.
+
+TOOLS JESS USES
+1. get_customer_name → Retrieves customer's name
+2. get_case_details → Gets debt amount, overdue days, risk level
+3. propose_payment_plan → Calculates installment plans or validates discount offers
+4. update_status → Logs call outcome (payment promise, refusal, callback, etc.)
+
+WHY THIS POC MATTERS
+🎯 Automates collections without sounding robotic or aggressive
+💬 100% natural conversation (pauses, empathy, customer adaptation)
+🔒 Privacy compliant (confirms identity before revealing sensitive info)
+💰 Increases recovery rate (offers flexible solutions vs demanding full payment)
+📊 Automatic tracking (every interaction logged in database)
+
+TEST DATA
+- Customer: Willian Martinez
+- Phone: +573124199685
+- Debt: $664.00
+- Days overdue: 8
+- Suggested plan: 3 payments of $221.33
+
+TECH STACK
+Backend: Python + FastAPI | Database: Supabase (PostgreSQL)
+AI Voice: ElevenLabs | Telephony: Twilio | Deployment: Ngrok (demo)
