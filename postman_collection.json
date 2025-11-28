@@ -2,16 +2,9 @@
 	"info": {
 		"_postman_id": "jess-voice-agent-poc",
 		"name": "Jess Voice Agent PoC",
-		"description": "Collection for testing Jess Voice Agent backend tools via Ngrok",
+		"description": "Collection for testing Jess Voice Agent backend tools. Use environments to switch between Local, Ngrok, and AWS Staging.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
-	"variable": [
-		{
-			"key": "base_url",
-			"value": "https://daec0fa726f0.ngrok-free.app",
-			"type": "string"
-		}
-	],
 	"item": [
 		{
 			"name": "Health Check",
