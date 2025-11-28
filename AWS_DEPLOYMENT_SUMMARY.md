@@ -74,18 +74,33 @@ All endpoints are working correctly:
 ssh -i ~/.ssh/voice-agent-key.pem ec2-user@3.219.214.103
 ```
 
-### View Container Logs
-```bash
-# SSH into EC2 first, then:
-sudo docker logs -f jess-voice-agent
-sudo docker logs -f jess-nginx
+### View Logs - Opción 1: CloudWatch (Recomendado)
+```
+1. Abre AWS Console → CloudWatch → Logs → Log groups
+2. Busca estos Log Groups:
+   • /aws/ec2/voice-agent/application  (logs generales)
+   • /aws/ec2/voice-agent/errors       (solo errores)
+3. Click en el log group → Verás los logs en tiempo real
 ```
 
-### View Application Logs
+**URL Directa:**
+- [Log Groups en CloudWatch](https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups)
+
+### View Logs - Opción 2: SSH (Script Local)
+```bash
+# Desde tu máquina local:
+./view_aws_logs.sh live      # Ver logs en tiempo real (como en local)
+./view_aws_logs.sh api       # Últimos 50 logs
+./view_aws_logs.sh errors    # Solo errores
+./view_aws_logs.sh status    # Estado de contenedores
+```
+
+### View Logs - Opción 3: SSH Manual
 ```bash
 # SSH into EC2 first, then:
-tail -f ~/voice_agent/logs/app_*.log
-tail -f ~/voice_agent/logs/errors_*.log
+sudo docker logs -f jess-voice-agent           # Tiempo real
+sudo docker logs --tail 100 jess-voice-agent   # Últimos 100
+tail -f ~/voice_agent/logs/app_*.log           # Archivo de logs
 ```
 
 ### Restart Containers
