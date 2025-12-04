@@ -12,27 +12,34 @@ POC SCOPE
 ✅ Automatic call outcome logging
 
 HOW IT WORKS (Happy Path)
-1. Jess calls → Casual greeting
-2. Confirms identity with real name (no debt info yet)
-3. Mentions specific debt: amount & days overdue
-4. Customer can't pay all → Jess offers installment plan/discount
-5. Customer accepts → Jess confirms & promises SMS
-6. Logs commitment to database & says goodbye
-Natural 1-2 min conversation. No pressure.
+1. Jess calls → Casual greeting: "Hi! This is Jess. Am I speaking with the account holder?"
+2. Calls API to get customer's name (privacy-first approach)
+3. Confirms identity: "Am I speaking with [Name]?"
+4. ONLY AFTER confirmation → Mentions specific debt: amount & days overdue
+5. Customer can't pay all → Jess offers installment plan/discount
+6. Customer accepts → Jess confirms & promises SMS confirmation
+7. Logs commitment to database & says goodbye
+Natural 2-3 min conversation. No pressure, no corporate language.
 
 
 CONVERSATION EXAMPLE
 --------------------
-Jess: "Hi! Am I speaking with Willian Martinez?"
-Customer: "Yes"
-Jess: "I'm calling about an outstanding balance of $664 from 7 days ago. Were you aware?"
-Customer: "Yes, but I can't pay it all now"
-Jess: "I understand. We can divide it. Would 2, 3, or 4 payments work better?"
+Jess: "Hi! This is Jess. Am I speaking with the account holder?"
+Customer: "Yes, that's me"
+Jess: [Calls get_customer_name API] "Perfect! Am I speaking with Willian Martinez?"
+Customer: "Yes, that's me"
+Jess: [Calls get_case_details API] "I'm calling about something quick I noticed. There's an outstanding balance of $664 from about 7 days ago. Were you aware of this pending amount?"
+Customer: "Yes, but I can't pay it all right now"
+Jess: "I completely understand. It happens sometimes. Could you handle it today in full, or would you prefer we divide it into installments?"
+Customer: "I'd prefer installments"
+Jess: "We can do it in 2, 3, or 4 payments, whatever works best for you."
 Customer: "3 would work"
-Jess: "Perfect, $221.33 each. What dates work for you?"
-Customer: "The 25th monthly"
-Jess: "Excellent. I'll send confirmation. Thank you!"
-Result: Committed to 3 payments. Logged automatically.
+Jess: [Calls propose_payment_plan API] "Perfect, that would be $221.33 each. What dates work for you?"
+Customer: "The 25th of each month"
+Jess: "Excellent. So we're agreed on 3 installments of $221.33, starting December 25th. Confirmed?"
+Customer: "Yes, confirmed"
+Jess: [Calls update_status API] "Perfect. I'll send you confirmation via text in 2 minutes. Thank you for your time, Willian. Have an excellent day."
+Result: Payment promise logged. Customer committed to 3-payment plan.
 
 TOOLS JESS USES
 1. get_customer_name → Retrieves customer's name
@@ -48,12 +55,10 @@ WHY THIS POC MATTERS
 📊 Automatic tracking (every interaction logged in database)
 
 TEST DATA
-- Customer: Willian Martinez
-- Phone: +573124199685
-- Debt: $664.00
-- Days overdue: 8
-- Suggested plan: 3 payments of $221.33
+1. Willian Martinez | +573124199685 | Debt: $664 | Overdue: 8 days
+2. Mauricio Ordonez | +16787079207 | Debt: $850 | Due: Dec 15, 2025
+3. Mauricio Cuevas | +16173653176 | Debt: $1,200 | Due: Dec 20, 2025
 
 TECH STACK
 Backend: Python + FastAPI | Database: Supabase (PostgreSQL)
-AI Voice: ElevenLabs | Telephony: Twilio | Deployment: Ngrok (demo)
+AI Voice: ElevenLabs | Telephony: Twilio | Deployment: AWS EC2 (Docker)
