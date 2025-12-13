@@ -348,3 +348,18 @@ h5 {
     display: inline-block;
     margin-right: 6px;
 }
+
+/* Agent Select Visibility Fix */
+.agent-select {
+    color: var(--text-primary) !important;
+    background-color: white !important;
+    border: 1px solid var(--border) !important;
+    font-weight: 500;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+.agent-select option {
+    color: black;
+    background: white;
+}

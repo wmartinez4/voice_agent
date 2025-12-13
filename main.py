@@ -176,6 +176,7 @@ class CustomerListItem(BaseModel):
 class InitiateCallRequest(BaseModel):
     """Request to initiate a call to a customer"""
     phone: str = Field(..., description="Customer phone number to call")
+    agent_id: Optional[str] = Field(None, description="Specific ElevenLabs Agent ID to use")
 
 
 class InitiateCallResponse(BaseModel):
@@ -495,11 +496,38 @@ async def list_customers():
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
+@app.get("/api/agents")
+async def list_agents():
+    """
+    Fetch available agents from ElevenLabs API.
+    """
+    logger.info("🤖 Fetching agents from ElevenLabs")
+    
+    ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+    if not ELEVENLABS_API_KEY:
+        raise HTTPException(status_code=500, detail="ElevenLabs API Key not configured")
+        
+    url = "https://api.elevenlabs.io/v1/convai/agents"
+    headers = {"xi-api-key": ELEVENLABS_API_KEY}
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get('agents', [])
+        else:
+            logger.error(f"ElevenLabs Error: {response.text}")
+            raise HTTPException(status_code=response.status_code, detail="Failed to fetch agents")
+    except Exception as e:
+        logger.error(f"Error fetching agents: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/api/call", response_model=InitiateCallResponse)
 async def initiate_call(request: InitiateCallRequest):
     """
     Initiate an outbound call to a customer via ElevenLabs API.
-    This endpoint triggers the voice agent to call the specified phone number.
+    Uses specific agent_id if provided, otherwise defaults to env var.
     """
     logger.info(f"📞 Initiating call to: {request.phone}")
     
@@ -518,10 +546,16 @@ async def initiate_call(request: InitiateCallRequest):
         ELEVENLABS_AGENT_ID = os.getenv("ELEVENLABS_AGENT_ID")
         AGENT_PHONE_NUMBER_ID = os.getenv("AGENT_PHONE_NUMBER_ID")
         
-        if not ELEVENLABS_API_KEY or not ELEVENLABS_AGENT_ID:
+        if not ELEVENLABS_API_KEY:
             logger.error("ElevenLabs credentials not configured")
             raise HTTPException(status_code=500, detail="ElevenLabs credentials not configured")
         
+        # Use requested agent_id or fallback to env var
+        agent_id_to_use = request.agent_id if request.agent_id else ELEVENLABS_AGENT_ID
+        
+        if not agent_id_to_use:
+             raise HTTPException(status_code=500, detail="No Agent ID provided and default not set")
+
         # Prepare API request to ElevenLabs
         url = "https://api.elevenlabs.io/v1/convai/twilio/outbound-call"
         
@@ -531,7 +565,7 @@ async def initiate_call(request: InitiateCallRequest):
         }
         
         payload = {
-            "agent_id": ELEVENLABS_AGENT_ID,
+            "agent_id": agent_id_to_use,
             "to_number": request.phone,
         }
         

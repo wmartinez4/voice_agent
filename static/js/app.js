@@ -5,9 +5,11 @@ const API_BASE_URL = window.location.origin;
 
 // Bootstrap Modal Instance
 let callModal;
+// Available Agents Cache
+let availableAgents = [];
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     console.log('GenuVoice Control Panel Initialized');
 
     // Initialize Bootstrap Modal
@@ -16,12 +18,32 @@ document.addEventListener('DOMContentLoaded', function () {
         callModal = new bootstrap.Modal(callModalElement);
     }
 
-    // Load customers on page load
+    // Load available agents first
+    await loadAgents();
+
+    // Then load customers
     loadCustomers();
 
     // Auto-refresh every 30 seconds
     setInterval(loadCustomers, 30000);
 });
+
+/**
+ * Fetch available agents from API
+ */
+async function loadAgents() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/agents`);
+        if (response.ok) {
+            availableAgents = await response.json();
+            console.log(`Loaded ${availableAgents.length} agents`);
+        } else {
+            console.error('Failed to load agents');
+        }
+    } catch (e) {
+        console.error('Error loading agents:', e);
+    }
+}
 
 /**
  * Load all customers from API
@@ -39,10 +61,7 @@ async function loadCustomers() {
         const customers = await response.json();
         console.log(`Loaded ${customers.length} customers`);
 
-        // Update stats
         updateStats(customers);
-
-        // Populate table
         populateCustomersTable(customers);
 
     } catch (error) {
@@ -55,7 +74,6 @@ async function loadCustomers() {
  */
 function updateStats(customers) {
     const totalCustomers = customers.length;
-    // Calculate pseudo-stats for demo purposes
     const totalRecovered = customers.reduce((sum, c) => c.status === 'promised_to_pay' ? sum + c.debt_amount : sum, 0);
     const totalDebt = customers.reduce((sum, c) => sum + c.debt_amount, 0);
 
@@ -77,12 +95,16 @@ function populateCustomersTable(customers) {
     const tbody = document.getElementById('customers-tbody');
     if (!tbody) return;
 
+    // Preserve current selections if refreshing? 
+    // For simplicity, we just rebuild. Ideally we'd map customerId -> selectedAgent.
+    // Given the requirement, resetting to default (first agent) is acceptable for now per "default selected".
+
     tbody.innerHTML = '';
 
     if (customers.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="text-center text-muted py-5">
+                <td colspan="9" class="text-center text-muted py-5">
                     <p class="mb-0">No active accounts found.</p>
                 </td>
             </tr>
@@ -142,13 +164,44 @@ function createCustomerRow(customer) {
         `<span class="text-muted small">-</span>`;
     row.appendChild(lastCallCell);
 
+    // AGENT SELECTION COLUMN
+    const agentCell = document.createElement('td');
+    const agentSelect = document.createElement('select');
+    agentSelect.className = 'form-select form-select-sm agent-select';
+    agentSelect.id = `agent-select-${customer.id}`; // unique ID
+    agentSelect.style.width = '140px';
+
+    // Populate dropdown
+    if (availableAgents.length > 0) {
+        availableAgents.forEach(agent => {
+            const option = document.createElement('option');
+            option.value = agent.agent_id;
+            option.textContent = agent.name;
+            agentSelect.appendChild(option);
+        });
+        // First one selected by default (browser behavior)
+    } else {
+        const option = document.createElement('option');
+        option.textContent = "Loading...";
+        agentSelect.appendChild(option);
+    }
+
+    agentCell.appendChild(agentSelect);
+    row.appendChild(agentCell);
+
     // Action Button
     const actionCell = document.createElement('td');
     actionCell.className = "text-end pe-4";
     const callButton = document.createElement('button');
     callButton.className = 'btn-call-action';
     callButton.innerHTML = '<i class="bi bi-telephone-fill me-1"></i> Call';
-    callButton.onclick = () => initiateCall(customer);
+
+    // Pass the customer AND the specific selector ID to the call function
+    callButton.onclick = () => {
+        const selectedAgentId = document.getElementById(`agent-select-${customer.id}`).value;
+        initiateCall(customer, selectedAgentId);
+    };
+
     actionCell.appendChild(callButton);
     row.appendChild(actionCell);
 
@@ -181,8 +234,8 @@ function createStatusBadge(status) {
 /**
  * Initiate call to customer
  */
-async function initiateCall(customer) {
-    console.log('Initiating call to:', customer.name, customer.phone);
+async function initiateCall(customer, agentId) {
+    console.log('Initiating call to:', customer.name, customer.phone, 'Agent:', agentId);
 
     // Show modal
     callModal.show();
@@ -209,7 +262,8 @@ async function initiateCall(customer) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                phone: customer.phone
+                phone: customer.phone,
+                agent_id: agentId // Pass the selected agent
             })
         });
 
@@ -222,12 +276,14 @@ async function initiateCall(customer) {
             // Show "Conversation in progress"
             if (elConversation) elConversation.classList.remove('d-none');
 
-            // Simulating a call flow for UI demo
             const logDiv = document.getElementById('conversation-log');
             if (logDiv) {
-                logDiv.innerHTML = `<div class="text-muted small">Connecting to agent...</div>`;
+                // Find agent name for display
+                const agentName = availableAgents.find(a => a.agent_id === agentId)?.name || "Agent";
+
+                logDiv.innerHTML = `<div class="text-muted small">Connecting to ${agentName}...</div>`;
                 setTimeout(() => {
-                    logDiv.innerHTML += `<div class="mt-2"><strong>Jess:</strong> Hello, this is Jess from GenuVoice.</div>`;
+                    logDiv.innerHTML += `<div class="mt-2"><strong>${agentName}:</strong> Hello, this is ${agentName} from GenuVoice.</div>`;
                 }, 1000);
             }
 
