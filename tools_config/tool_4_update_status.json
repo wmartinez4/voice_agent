@@ -1,0 +1,74 @@
+{
+  "type": "webhook",
+  "name": "update_status",
+  "description": "Updates the customer's status in the database at the END of the call. Call this before saying goodbye.",
+  "disable_interruptions": false,
+  "force_pre_tool_speech": "auto",
+  "assignments": [],
+  "tool_call_sound": null,
+  "tool_call_sound_behavior": "auto",
+  "execution_mode": "immediate",
+  "api_schema": {
+    "url": "https://genuvoice.com/tools/update-status",
+    "method": "POST",
+    "path_params_schema": [],
+    "query_params_schema": [],
+    "request_body_schema": {
+      "id": "body",
+      "type": "object",
+      "description": "Request body options for API call",
+      "properties": [
+        {
+          "id": "phone",
+          "type": "string",
+          "value_type": "dynamic_variable",
+          "description": "",
+          "dynamic_variable": "system__called_number",
+          "constant_value": "",
+          "enum": null,
+          "is_system_provided": false,
+          "required": true
+        },
+        {
+          "id": "new_status",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "The final outcome of the call. Enum: promised_to_pay, refused, callback_requested, wrong_number, voicemail, hung_up, escalated, already_paid",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": [
+            "promised_to_pay",
+            "refused",
+            "callback_requested",
+            "wrong_number",
+            "voicemail",
+            "hung_up",
+            "escalated",
+            "already_paid"
+          ],
+          "is_system_provided": false,
+          "required": true
+        },
+        {
+          "id": "summary",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "A brief summary of what was agreed or discussed (e.g. 'Agreed to pay $200 on Friday')",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "is_system_provided": false,
+          "required": false
+        }
+      ],
+      "required": false,
+      "value_type": "llm_prompt"
+    },
+    "request_headers": [],
+    "auth_connection": null
+  },
+  "response_timeout_secs": 20,
+  "dynamic_variables": {
+    "dynamic_variable_placeholders": {}
+  }
+}

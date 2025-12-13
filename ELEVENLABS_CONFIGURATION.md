@@ -21,84 +21,37 @@ This guide details exactly how to configure the "Jess" agent in ElevenLabs for t
 
 ## 3. Tools Configuration
 
-Configure these 4 tools in the "Tools" section.
+Import the following JSON files directly into the ElevenLabs "Tools" section.
+These files are located in the `tools_config/` directory of this project.
+
 **Base URL:** `https://genuvoice.com`
 
 ### Tool 1: get_customer_name
 *Privacy-First: Gets name to verify identity before revealing debt.*
 
-- **Name:** `get_customer_name`
-- **Description:** `Get customer name for identity verification`
-- **URL:** `https://genuvoice.com/tools/get-customer-name`
-- **Method:** `POST`
-- **Schema:**
-```json
-{
-  "type": "object",
-  "properties": {
-    "phone": { "type": "string", "description": "Customer phone number (E.164)" }
-  },
-  "required": ["phone"]
-}
-```
+- **File:** `tools_config/tool_1_get_customer_name.json`
+- **Description:** `Retrieves only the customer name for identity verification`
+- **Dynamic Variable:** `phome` -> `system__called_number`
 
 ### Tool 2: get_case_details
 *Called ONLY after user says "Yes" to identity check.*
 
-- **Name:** `get_case_details`
+- **File:** `tools_config/tool_2_get_case_details.json`
 - **Description:** `Get debt details AFTER identity confirmed`
-- **URL:** `https://genuvoice.com/tools/get-case-details`
-- **Method:** `POST`
-- **Schema:**
-```json
-{
-  "type": "object",
-  "properties": {
-    "phone": { "type": "string", "description": "Customer phone number" }
-  },
-  "required": ["phone"]
-}
-```
 
 ### Tool 3: propose_payment_plan
 *Calculates installments or valid settlements.*
 
-- **Name:** `propose_payment_plan`
+- **File:** `tools_config/tool_3_propose_payment_plan.json`
 - **Description:** `Calculate payment plans or validate offers`
-- **URL:** `https://genuvoice.com/tools/propose-payment-plan`
-- **Method:** `POST`
-- **Schema:**
-```json
-{
-  "type": "object",
-  "properties": {
-    "phone": { "type": "string" },
-    "installments": { "type": "integer", "description": "2, 3, or 4" },
-    "offer_amount": { "type": "number", "description": "Settlement offer in USD" }
-  },
-  "required": ["phone"]
-}
-```
 
 ### Tool 4: update_status
 *Updates database at end of call.*
 
-- **Name:** `update_status`
+- **File:** `tools_config/tool_4_update_status.json`
 - **Description:** `Update customer status after call`
-- **URL:** `https://genuvoice.com/tools/update-status`
-- **Method:** `POST`
-- **Schema:**
-```json
-{
-  "type": "object",
-  "properties": {
-    "phone": { "type": "string" },
-    "new_status": { "type": "string", "enum": ["promised_to_pay", "refused", "callback_requested", "wrong_number", "voicemail"] },
-    "summary": { "type": "string" }
-  },
-  "required": ["phone", "new_status"]
-}
-```
+
+*(See the `tools_config/` folder for the full JSON schemas to copy/paste)*
 
 ## 4. Privacy Flow Logic
 
