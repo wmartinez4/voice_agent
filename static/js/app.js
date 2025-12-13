@@ -148,6 +148,11 @@ function createCustomerRow(customer) {
     statusCell.appendChild(createStatusBadge(customer.status));
     row.appendChild(statusCell);
 
+    // Risk Level (Re-added)
+    const riskCell = document.createElement('td');
+    riskCell.appendChild(createRiskBadge(customer.risk_level));
+    row.appendChild(riskCell);
+
     // Aging / Overdue
     const overdueCell = document.createElement('td');
     let overdueClass = 'overdue-low';
@@ -227,6 +232,26 @@ function createStatusBadge(status) {
     const statusInfo = statusMap[status] || { text: status, class: 'badge-wrong-number' };
     badge.textContent = statusInfo.text;
     badge.classList.add(statusInfo.class);
+
+    return badge;
+}
+
+/**
+ * Create risk level badge
+ */
+function createRiskBadge(riskLevel) {
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+
+    const riskMap = {
+        'low': { text: 'Low', class: 'badge-active' }, // Reusing active/success color for low risk
+        'medium': { text: 'Medium', class: 'badge-promised' }, // Reusing warning color
+        'high': { text: 'High', class: 'badge-refused' } // Reusing danger color
+    };
+
+    const riskInfo = riskMap[riskLevel] || { text: riskLevel, class: 'badge-wrong-number' };
+    badge.innerHTML = `<i class="bi bi-circle-fill" style="font-size: 6px; vertical-align: middle; margin-right: 4px;"></i> ${riskInfo.text}`;
+    badge.classList.add(riskInfo.class);
 
     return badge;
 }
