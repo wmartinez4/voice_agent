@@ -155,71 +155,12 @@ Now you need to connect your FastAPI backend to the agent:
 
 3. In ElevenLabs agent settings, go to **Tools** or **Client Tools**
 
-4. Add each tool:
+4. Add each tool (See `ELEVENLABS_CONFIGURATION.md` for full details):
 
-#### Tool 1: get_case_details
-
-- **Name**: `get_case_details`
-- **Description**: "Retrieves customer debt information after identity confirmation"
-- **URL**: `https://your-ngrok-url.ngrok.io/tools/get-case-details`
-- **Method**: `POST`
-- **Parameters**:
-  ```json
-  {
-    "phone": {
-      "type": "string",
-      "description": "Customer phone number in E.164 format"
-    }
-  }
-  ```
-
-#### Tool 2: propose_payment_plan
-
-- **Name**: `propose_payment_plan`
-- **Description**: "Calculates payment plans or validates settlement offers"
-- **URL**: `https://your-ngrok-url.ngrok.io/tools/propose-payment-plan`
-- **Method**: `POST`
-- **Parameters**:
-  ```json
-  {
-    "phone": {
-      "type": "string",
-      "description": "Customer phone number"
-    },
-    "installments": {
-      "type": "integer",
-      "description": "Number of installments (optional, 2-4)"
-    },
-    "offer_amount": {
-      "type": "number",
-      "description": "Settlement offer amount (optional)"
-    }
-  }
-  ```
-
-#### Tool 3: update_status
-
-- **Name**: `update_status`
-- **Description**: "Updates customer status after call completion"
-- **URL**: `https://your-ngrok-url.ngrok.io/tools/update-status`
-- **Method**: `POST`
-- **Parameters**:
-  ```json
-  {
-    "phone": {
-      "type": "string",
-      "description": "Customer phone number"
-    },
-    "new_status": {
-      "type": "string",
-      "description": "New status (promised_to_pay, refused, etc.)"
-    },
-    "summary": {
-      "type": "string",
-      "description": "Brief summary of interaction"
-    }
-  }
-  ```
+- **Tool 1**: `get_customer_name`
+- **Tool 2**: `get_case_details`
+- **Tool 3**: `propose_payment_plan`
+- **Tool 4**: `update_status`
 
 ---
 
@@ -227,7 +168,7 @@ Now you need to connect your FastAPI backend to the agent:
 
 1. In ElevenLabs agent settings, find **System Prompt** or **Instructions**
 
-2. Open the file: `/Users/willianmartinez/voice_agent/olivia_prompt.txt`
+2. Open the file: `/Users/willianmartinez/voice_agent/jess_prompt_v2.txt`
 
 3. Select all (Cmd+A) and copy (Cmd+C)
 

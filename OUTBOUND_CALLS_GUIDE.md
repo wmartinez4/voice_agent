@@ -336,11 +336,10 @@ supabase.table('customers') \
 **Cause:** Tools not configured correctly in ElevenLabs
 
 **Solution:**
-1. Check ngrok is running: `http://127.0.0.1:4040`
-2. Verify tool URLs in ElevenLabs dashboard
-3. Test endpoints manually:
+1. Verify tool URLs in ElevenLabs dashboard point to `https://genuvoice.com` (or your ngrok if testing locally)
+2. Test endpoints manually:
    ```bash
-   curl -X POST https://YOUR_NGROK_URL/tools/get-case-details \
+   curl -X POST https://genuvoice.com/tools/get-case-details \
      -H "Content-Type: application/json" \
      -d '{"phone": "+573124199685"}'
    ```
@@ -355,12 +354,21 @@ supabase.table('customers') \
 3. Go to **Analytics** or **Conversations**
 4. See transcripts, tool calls, and audio recordings
 
-### View in Ngrok:
+### View in Ngrok (Local Testing Only):
 ```bash
 # Open ngrok web interface
 open http://127.0.0.1:4040
 ```
-Shows all HTTP requests made by Jess to your backend
+Shows all HTTP requests made by Jess to your backend if running locally.
+
+### View Backend Logs (Production):
+```bash
+# SSH into AWS
+ssh -i ~/.ssh/voice-agent-key.pem ec2-user@3.219.214.103
+
+# Watch Docker logs
+docker logs -f jess-voice-agent
+```
 
 ### View Backend Logs:
 Check terminal where FastAPI is running for real-time logs
