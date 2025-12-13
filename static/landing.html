@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenuVoice - Intelligent Debt Recovery</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/landing.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container"
+            style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 24px;">
+            <a href="#" class="logo">
+                <i class="bi bi-soundwave"></i> GenuVoice
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="nav-item">Product</a>
+                <a href="#how-it-works" class="nav-item">Solutions</a>
+                <a href="#developers" class="nav-item">Developers</a>
+                <a href="/dashboard" class="btn btn-secondary" style="margin-left: 20px;">Sign in</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background-graphic"></div>
+
+        <div class="container hero-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+            <div class="hero-content">
+                <h1>Financial infrastructure <br>for debt recovery.</h1>
+                <p class="hero-subtitle">
+                    GenuVoice provides the API primitives and autonomous agents that platforms need to recover revenue
+                    with empathy and precision.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/dashboard" class="btn btn-primary">Start now <i class="bi bi-arrow-right"></i></a>
+                    <a href="#contact" class="btn btn-secondary">Contact sales</a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="app-card">
+                    <div class="card-header-clean">
+                        <div style="font-weight: 600; font-size: 0.95rem;">Active Interaction</div>
+                        <div class="agent-status"><span class="status-dot"></span> Jess (AI)</div>
+                    </div>
+
+                    <div class="dialogue">
+                        <div class="bubble agent">
+                            Hi, this is Jess from GenuVoice. Am I speaking with the account holder regarding the invoice
+                            #INV-2024?
+                        </div>
+                        <div class="bubble user">
+                            Yes, that's me. I completely forgot about that one.
+                        </div>
+                        <div class="bubble agent">
+                            No problem at all. We can split the <strong>$1,250</strong> balance into three monthly
+                            installments of <strong>$416</strong> starting today. Would that work for you?
+                        </div>
+                    </div>
+
+                    <div
+                        style="margin-top: 30px; border-top: 1px solid #F1F5F9; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #64748B; font-size: 0.85rem;">Payment Link Generated</span>
+                        <span style="color: #635BFF; font-weight: 600; font-size: 0.9rem;">stripe.com/pay/xv9...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+            <div class="features-header">
+                <span class="caps-label">Unified Platform</span>
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Everything you need to recover revenue</h2>
+                <p style="color: #4F566B; font-size: 1.1rem;">A complete financial stack for debt collection, identity
+                    verification, and payment processing.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="bi bi-globe"></i></div>
+                    <h3>Global Scale</h3>
+                    <p style="color: #4F566B; margin-top: 12px;">Accept payments and recover debt in 135+ currencies
+                        with local compliance built-in.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="bi bi-robot"></i></div>
+                    <h3>Neural Agents</h3>
+                    <p style="color: #4F566B; margin-top: 12px;">Our voice models are trained on millions of financial
+                        conversations to negotiate effectively.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                    <h3>Bank-Grade Security</h3>
+                    <p style="color: #4F566B; margin-top: 12px;">SOC2, HIPAA, and GDPR readiness. We encrypt all
+                        sensitive data at rest and in transit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Developers Section -->
+    <section id="developers" class="code-section">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+            <div class="hero-container">
+                <!-- Reusing grid layout -->
+                <div class="text-content">
+                    <span class="caps-label">Developers First</span>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 24px;">Designed for the modern stack</h2>
+                    <p style="color: #4F566B; font-size: 1.1rem; margin-bottom: 32px;">
+                        Integrate autonomous recovery in minutes, not months. Our API is typed, documented, and
+                        idempotent.
+                    </p>
+                    <a href="#" class="btn btn-secondary">Read the API docs</a>
+                </div>
+                <div class="code-content">
+                    <div class="code-block">
+                        <div style="margin-bottom: 20px; color: #635BFF;">// Initialize Recovery Session</div>
+                        <pre style="margin: 0;"><code>
+const session = await genuvoice.campaigns.create({
+  customer: 'cus_8823',
+  strategy: 'empathetic_retention',
+  rules: {
+    max_discount: 0.15,
+    installments_allowed: true
+  }
+});
+
+console.log(session.status); // 'active'
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h4 style="margin-bottom: 16px;">GenuVoice</h4>
+                    <p style="color: #64748B; font-size: 0.9rem;">© 2025 GenuVoice Inc.</p>
+                </div>
+                <div style="display: flex; gap: 40px;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <span style="font-weight: 600; font-size: 0.9rem;">Product</span>
+                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">Payments</a>
+                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">Billing</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <span style="font-weight: 600; font-size: 0.9rem;">Company</span>
+                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">About</a>
+                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">Customers</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

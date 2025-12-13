@@ -1,0 +1,347 @@
+:root {
+    /* Mercury/Stripe Fusion Palette */
+    --bg-page: #FDFBF9;
+    /* Mercury Warm Off-White */
+    --bg-surface: #FFFFFF;
+    --text-primary: #1A1F36;
+    /* Ink Black */
+    --text-secondary: #4F566B;
+    --brand-accent: #635BFF;
+    /* Stripe Blurple */
+    --brand-dark: #0A2540;
+
+    /* Elegant Accents */
+    --accent-gold: #C6A668;
+    /* Subtle luxe touch */
+    --accent-soft-blue: #E8F3FF;
+
+    /* UI Dimensions */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 24px;
+
+    /* Shadows - "Quiet Luxury" */
+    --shadow-soft: 0 2px 5px rgba(60, 66, 87, 0.04), 0 0 0 1px rgba(60, 66, 87, 0.02);
+    --shadow-hover: 0 5px 15px rgba(60, 66, 87, 0.08), 0 0 0 1px rgba(60, 66, 87, 0.04);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg-page);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+}
+
+/* Navbar - Minimalist */
+.navbar {
+    padding: 24px 0;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.logo {
+    color: var(--text-primary);
+    font-size: 1.35rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.02em;
+}
+
+.logo i {
+    color: var(--brand-accent);
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.nav-links a.nav-item {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-links a.nav-item:hover {
+    color: var(--text-primary);
+}
+
+/* HERO - Clean & Typography Driven */
+.hero {
+    padding: 120px 0 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background-graphic {
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(99, 91, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.hero-container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 90%;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Buttons - "Mercury Style" */
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-primary {
+    background: var(--text-primary);
+    /* Mercury Black */
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--text-primary);
+    border: 1px solid #E2E8F0;
+}
+
+.btn-secondary:hover {
+    border-color: #CBD5E1;
+    background: #F8FAFC;
+}
+
+/* PRODUCT VISUAL - Elegant Card */
+.app-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header-clean {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.agent-status {
+    background: #F0FDF4;
+    color: #166534;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: #166534;
+    border-radius: 50%;
+}
+
+/* Dialogue UI */
+.dialogue {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.bubble {
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    max-width: 85%;
+    line-height: 1.5;
+}
+
+.bubble.agent {
+    background: #F8FAFC;
+    color: var(--text-primary);
+    border-bottom-left-radius: 4px;
+}
+
+.bubble.user {
+    background: var(--text-primary);
+    /* Dark bubble */
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+/* FEATURES - Minimal Grid */
+.features {
+    padding: 100px 0;
+    background: white;
+}
+
+.features-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 80px;
+}
+
+.caps-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--brand-accent);
+    margin-bottom: 16px;
+    display: block;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.feature-item {
+    padding: 32px;
+    background: #FCFCFD;
+    /* Very Subtle */
+    border-radius: 16px;
+    transition: transform 0.2s;
+}
+
+.feature-item:hover {
+    background: white;
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 24px;
+    font-size: 1.25rem;
+    color: var(--brand-accent);
+}
+
+/* CODE SECTION */
+.code-section {
+    padding: 100px 0;
+    background: var(--bg-page);
+}
+
+.tabs {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.tab {
+    padding-bottom: 16px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+    color: var(--brand-accent);
+    border-color: var(--brand-accent);
+}
+
+.code-block {
+    background: #1A1F36;
+    border-radius: 12px;
+    padding: 32px;
+    color: #A3ACBA;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+}
+
+/* FOOTER */
+footer {
+    background: white;
+    border-top: 1px solid #F1F5F9;
+    padding: 80px 0 40px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -221,8 +221,14 @@ def generate_payment_dates(num_installments: int) -> List[str]:
 
 @app.get("/")
 async def root():
+    """Serve the landing page."""
+    return FileResponse("static/landing.html")
+
+
+@app.get("/dashboard")
+async def dashboard():
     """Serve the dashboard HTML page."""
-    return FileResponse("static/index.html")
+    return FileResponse("static/dashboard.html")
 
 
 @app.get("/health")

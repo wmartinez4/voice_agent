@@ -26,18 +26,6 @@ Autonomous debt collection system with conversational AI voice agents. Built wit
 
 ## 🛠️ Tech Stack
 
-**Backend:**
-- FastAPI (Python 3.9+)
-- Supabase (PostgreSQL + Python client)
-- Python logging (file + console output)
-
-**Voice AI:**
-- ElevenLabs Conversational AI (2 agents: English + Spanish)
-- Twilio (telephony provider)
-
-**Frontend:**
-- HTML5 + Vanilla JavaScript
-- Bootstrap 5 (UI framework)
 - No build process required
 
 **Infrastructure:**
