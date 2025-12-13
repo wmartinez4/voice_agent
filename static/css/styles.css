@@ -1,0 +1,220 @@
+/* GenuVoice Control Panel - Custom Styles */
+
+:root {
+    --primary-color: #2563eb;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #06b6d4;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Stats Cards */
+.stats-card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Main Card */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+/* Table */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Status Badges */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.badge-active {
+    background-color: #10b981;
+}
+
+.badge-promised {
+    background-color: #f59e0b;
+}
+
+.badge-refused {
+    background-color: #ef4444;
+}
+
+.badge-callback {
+    background-color: #06b6d4;
+}
+
+.badge-voicemail {
+    background-color: #8b5cf6;
+}
+
+.badge-wrong-number {
+    background-color: #6b7280;
+}
+
+/* Risk Level Badges */
+.badge-risk-low {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-risk-medium {
+    background-color: #fed7aa;
+    color: #92400e;
+}
+
+.badge-risk-high {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Call Button */
+.btn-call {
+    background-color: var(--success-color);
+    border: none;
+    color: white;
+    padding: 0.375rem 1rem;
+    transition: all 0.2s;
+}
+
+.btn-call:hover {
+    background-color: #059669;
+    transform: scale(1.05);
+    color: white;
+}
+
+.btn-call:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-call i {
+    margin-right: 0.25rem;
+}
+
+/* Loading Spinner */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}
+
+/* Modal Enhancements */
+.modal-content {
+    border: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom: none;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Success/Error Icons in Modal */
+.bi-check-circle-fill,
+.bi-x-circle-fill {
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Debt Amount Highlight */
+.debt-amount {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Days Overdue Warning */
+.days-overdue-high {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.days-overdue-medium {
+    color: #f59e0b;
+    font-weight: 500;
+}
+
+.days-overdue-low {
+    color: #10b981;
+}
+

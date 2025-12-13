@@ -5,6 +5,8 @@ Provides tool endpoints for ElevenLabs conversational AI agent.
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime, timedelta
@@ -12,6 +14,11 @@ from database import get_supabase_client
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+import requests
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging (similar to Serilog in .NET)
 # Creates logs in both console and file
@@ -90,6 +97,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Initialize Supabase client
 supabase = get_supabase_client()
 
@@ -146,6 +156,37 @@ class UpdateStatusResponse(BaseModel):
 
 
 # ============================================================================
+# DASHBOARD/PANEL MODELS
+# ============================================================================
+
+class CustomerListItem(BaseModel):
+    """Customer item for dashboard list"""
+    id: str  # UUID in Supabase
+    name: str
+    phone: str
+    debt_amount: float
+    status: str
+    risk_level: str
+    due_date: str
+    days_overdue: int
+    last_call_date: Optional[str] = None
+    updated_at: Optional[str] = None
+
+
+class InitiateCallRequest(BaseModel):
+    """Request to initiate a call to a customer"""
+    phone: str = Field(..., description="Customer phone number to call")
+
+
+class InitiateCallResponse(BaseModel):
+    """Response from call initiation"""
+    success: bool
+    conversation_id: Optional[str] = None
+    message: str
+    customer_name: Optional[str] = None
+
+
+# ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
 
@@ -177,6 +218,12 @@ def generate_payment_dates(num_installments: int) -> List[str]:
 # ============================================================================
 # API ENDPOINTS
 # ============================================================================
+
+@app.get("/")
+async def root():
+    """Serve the dashboard HTML page."""
+    return FileResponse("static/index.html")
+
 
 @app.get("/health")
 async def health_check():
@@ -397,6 +444,148 @@ async def update_status(request: UpdateStatusRequest):
 
 
 # ============================================================================
+# DASHBOARD/PANEL API ENDPOINTS
+# ============================================================================
+
+@app.get("/api/customers", response_model=List[CustomerListItem])
+async def list_customers():
+    """
+    Get list of all customers for dashboard display.
+    Returns customer information including debt status and last contact.
+    """
+    logger.info("📋 Fetching all customers for dashboard")
+    
+    try:
+        # Query all customers from database
+        result = supabase.table('customers').select("*").order('due_date', desc=False).execute()
+        
+        if not result.data:
+            logger.info("No customers found")
+            return []
+        
+        # Format customer data
+        customers = []
+        for customer in result.data:
+            days_overdue = calculate_days_overdue(customer['due_date'])
+            
+            customers.append(CustomerListItem(
+                id=customer['id'],
+                name=customer['name'],
+                phone=customer['phone'],
+                debt_amount=float(customer['debt_amount']),
+                status=customer.get('status', 'active'),
+                risk_level=customer['risk_level'],
+                due_date=customer['due_date'],
+                days_overdue=days_overdue,
+                last_call_date=customer.get('last_call_date'),
+                updated_at=customer.get('updated_at')
+            ))
+        
+        logger.info(f"✅ Retrieved {len(customers)} customers")
+        return customers
+        
+    except Exception as e:
+        logger.error(f"❌ Error fetching customers: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@app.post("/api/call", response_model=InitiateCallResponse)
+async def initiate_call(request: InitiateCallRequest):
+    """
+    Initiate an outbound call to a customer via ElevenLabs API.
+    This endpoint triggers the voice agent to call the specified phone number.
+    """
+    logger.info(f"📞 Initiating call to: {request.phone}")
+    
+    try:
+        # Get customer info from database
+        result = supabase.table('customers').select("*").eq('phone', request.phone).execute()
+        
+        if not result.data or len(result.data) == 0:
+            raise HTTPException(status_code=404, detail="Customer not found")
+        
+        customer = result.data[0]
+        customer_name = customer['name']
+        
+        # ElevenLabs API configuration
+        ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+        ELEVENLABS_AGENT_ID = os.getenv("ELEVENLABS_AGENT_ID")
+        AGENT_PHONE_NUMBER_ID = os.getenv("AGENT_PHONE_NUMBER_ID")
+        
+        if not ELEVENLABS_API_KEY or not ELEVENLABS_AGENT_ID:
+            logger.error("ElevenLabs credentials not configured")
+            raise HTTPException(status_code=500, detail="ElevenLabs credentials not configured")
+        
+        # Prepare API request to ElevenLabs
+        url = "https://api.elevenlabs.io/v1/convai/twilio/outbound-call"
+        
+        headers = {
+            "xi-api-key": ELEVENLABS_API_KEY,
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "agent_id": ELEVENLABS_AGENT_ID,
+            "to_number": request.phone,
+        }
+        
+        if AGENT_PHONE_NUMBER_ID:
+            payload["agent_phone_number_id"] = AGENT_PHONE_NUMBER_ID
+        
+        # Add dynamic variables for the conversation
+        payload["conversation_config_override"] = {
+            "agent": {
+                "dynamic_variables": {
+                    "phone_number": request.phone,
+                    "customer_name": customer_name
+                }
+            }
+        }
+        
+        logger.info(f"Calling ElevenLabs API for {customer_name}")
+        
+        # Make API call to ElevenLabs
+        response = requests.post(url, json=payload, headers=headers, timeout=30)
+        
+        if response.status_code == 200:
+            data = response.json()
+            conversation_id = data.get('conversation_id', 'N/A')
+            
+            # Try to update last_call_date in database (if column exists)
+            try:
+                supabase.table('customers').update({
+                    "updated_at": datetime.now().isoformat()
+                }).eq('phone', request.phone).execute()
+            except Exception as db_error:
+                logger.warning(f"Could not update database timestamp: {db_error}")
+            
+            logger.info(f"✅ Call initiated successfully to {customer_name}")
+            logger.info(f"   Conversation ID: {conversation_id}")
+            
+            return InitiateCallResponse(
+                success=True,
+                conversation_id=conversation_id,
+                message=f"Call initiated successfully to {customer_name}",
+                customer_name=customer_name
+            )
+        else:
+            logger.error(f"ElevenLabs API error: {response.status_code} - {response.text}")
+            return InitiateCallResponse(
+                success=False,
+                message=f"Failed to initiate call: {response.text}"
+            )
+            
+    except HTTPException:
+        raise
+    except requests.exceptions.RequestException as e:
+        logger.error(f"❌ API request failed: {e}")
+        raise HTTPException(status_code=503, detail="ElevenLabs API unavailable")
+    except Exception as e:
+        logger.error(f"❌ Error initiating call: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+# ============================================================================
 # STARTUP
 # ============================================================================
 
@@ -406,12 +595,16 @@ async def startup_event():
     logger.info("=" * 60)
     logger.info("🚀 Jess Voice Agent API Starting...")
     logger.info("=" * 60)
-    logger.info("📡 Endpoints available:")
+    logger.info("📡 Tool Endpoints:")
     logger.info("   GET  /health")
-    logger.info("   POST /tools/get-customer-name (NEW - Privacy-first)")
+    logger.info("   POST /tools/get-customer-name")
     logger.info("   POST /tools/get-case-details")
     logger.info("   POST /tools/propose-payment-plan")
     logger.info("   POST /tools/update-status")
+    logger.info("")
+    logger.info("📊 Dashboard API Endpoints:")
+    logger.info("   GET  /api/customers")
+    logger.info("   POST /api/call")
     logger.info("=" * 60)
 
 
