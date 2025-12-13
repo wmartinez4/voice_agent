@@ -484,7 +484,8 @@ async def list_customers():
                 risk_level=customer['risk_level'],
                 due_date=customer['due_date'],
                 days_overdue=days_overdue,
-                last_call_date=customer.get('last_call_date'),
+                # Use updated_at as fallback for last_call_date since database schema might vary
+                last_call_date=customer.get('last_call_date') or customer.get('updated_at'),
                 updated_at=customer.get('updated_at')
             ))
         
