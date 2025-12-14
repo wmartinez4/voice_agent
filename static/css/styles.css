@@ -1,4 +1,4 @@
-/* Mercury-Inspired "Quiet Luxury" Dashboard */
+/* Mercury-Inspired "Quiet Luxury" Dashboard - Refined */
 
 :root {
     /* Palette */
@@ -6,9 +6,11 @@
     /* Warm Off-White */
     --bg-surface: #FFFFFF;
 
-    --text-primary: #1A1A1A;
-    --text-secondary: #595959;
-    --text-tertiary: #8C8C8C;
+    --text-primary: #0A2540;
+    /* Deep Navy */
+    --text-secondary: #425466;
+    /* Rich Gray */
+    --text-tertiary: #8492A6;
 
     --accent: #2059EA;
     /* Clear Blue */
@@ -25,12 +27,23 @@
     --danger-bg: #FFEBEE;
     --danger-text: #C62828;
 
-    --radius: 8px;
-    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
+    --radius: 10px;
+    /* Slightly rounder */
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
 }
 
 body {
-    background: var(--bg-app);
+    background-color: var(--bg-app);
+    /* Mercury-style Mesh Gradient - Visible but clean (Softened) */
+    background-image:
+        radial-gradient(at 100% 0%, rgba(29, 53, 87, 0.06) 0px, transparent 40%),
+        /* Navy hint */
+        radial-gradient(at 80% 20%, rgba(99, 91, 255, 0.08) 0px, transparent 50%),
+        /* Blurple hint */
+        radial-gradient(at 0% 0%, rgba(255, 230, 200, 0.15) 0px, transparent 50%);
+    /* Warm Gold hint */
+    background-attachment: fixed;
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
@@ -43,23 +56,27 @@ h4,
 h5 {
     font-weight: 600;
     letter-spacing: -0.01em;
+    color: var(--text-primary);
 }
 
 /* Navbar - Light & Clean */
 .navbar {
-    background: var(--bg-surface);
+    background: rgba(255, 255, 255, 0.9);
+    /* Glass effect */
+    backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
+    padding: 16px 24px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .navbar-brand {
     color: var(--text-primary) !important;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     display: flex;
     align-items: center;
     gap: 8px;
+    letter-spacing: -0.02em;
 }
 
 .navbar-brand i {
@@ -71,41 +88,45 @@ h5 {
     color: var(--accent);
     font-weight: 600;
     font-size: 0.7rem;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 12px;
+    letter-spacing: 0.03em;
 }
 
 .btn-outline-light {
     color: var(--text-secondary);
     border: 1px solid var(--border);
     background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .btn-outline-light:hover {
     color: var(--text-primary);
     border-color: var(--border-hover);
-    background: #F9F9F9;
+    background: #FAFAFA;
 }
 
 .user-profile {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     color: var(--text-primary);
     font-weight: 500;
 }
 
 .avatar-circle {
-    width: 32px;
-    height: 32px;
-    background: #F0F0F0;
-    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    background: #0A2540;
+    /* Detailed avatar */
+    color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Main Content */
@@ -114,14 +135,15 @@ h5 {
 }
 
 .page-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     color: var(--text-primary);
     margin-bottom: 4px;
+    letter-spacing: -0.02em;
 }
 
 .text-muted-light {
     color: var(--text-tertiary) !important;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 /* Cards - Minimalist */
@@ -130,11 +152,13 @@ h5 {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
-    transition: box-shadow 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    /* Lift */
 }
 
 .stats-card .card-body {
@@ -295,21 +319,80 @@ h5 {
 }
 
 /* Buttons */
-.btn-call-action {
-    background: white;
-    border: 1px solid var(--border);
-    color: var(--text-primary);
+/* Buttons - Mercury/Stripe Consistent Style */
+.btn-primary {
+    background-color: #1D3557;
+    /* Lighter Navy (Prussian Blue) */
+    border-color: #1D3557;
+    color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #14243b;
+    border-color: #14243b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(29, 53, 87, 0.2);
+}
+
+.btn-action-refresh {
+    background-color: white;
+    color: #059669;
+    /* Emerald Green */
+    border: 1px solid #D1FAE5;
     font-size: 0.85rem;
     font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 6px;
     transition: all 0.2s;
 }
 
-.btn-call-action:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-bg);
+.btn-action-refresh:hover {
+    background-color: #ECFDF5;
+    border-color: #10B981;
+    color: #047857;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+}
+
+.btn-ghost-primary {
+    background: linear-gradient(135deg, rgba(29, 53, 87, 0.02) 0%, rgba(29, 53, 87, 0.08) 100%);
+    color: #1D3557;
+    /* Navy */
+    border: 1px solid rgba(29, 53, 87, 0.3);
+    /* Softer border to blend with gradient */
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-ghost-primary:hover {
+    background: linear-gradient(135deg, rgba(29, 53, 87, 0.08) 0%, rgba(29, 53, 87, 0.15) 100%);
+    border-color: #1D3557;
+    color: #0A2540;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(29, 53, 87, 0.1);
+}
+
+.btn-action-call {
+    background-color: white;
+    color: var(--success-text);
+    /* Deep Green */
+    border: 1px solid rgba(27, 94, 32, 0.2);
+    /* Subtle Green Border */
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.btn-action-call:hover {
+    background-color: var(--success-bg);
+    /* Soft Green Fill */
+    border-color: var(--success-text);
+    color: var(--success-text);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(27, 94, 32, 0.1);
 }
 
 .btn-refresh {

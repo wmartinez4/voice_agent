@@ -100,6 +100,12 @@ app.add_middleware(
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("============================================================")
+    logger.info("🚀 Jess Voice Agent API Starting (CRUD Enabled)...")
+    logger.info("============================================================")
+
 # Initialize Supabase client
 supabase = get_supabase_client()
 
@@ -454,17 +460,98 @@ async def update_status(request: UpdateStatusRequest):
 # DASHBOARD/PANEL API ENDPOINTS
 # ============================================================================
 
+# --- Customer CRUD Models ---
+class CreateCustomerRequest(BaseModel):
+    name: str = Field(..., description="Customer full name")
+    phone: str = Field(..., description="Customer phone number (E.164)")
+    debt_amount: float = Field(..., description="Debt amount")
+    due_date: Optional[str] = Field(None, description="Due date YYYY-MM-DD")
+    status: str = Field("active", description="Initial status")
+    risk_level: str = Field("medium", description="Risk level (low, medium, high)")
+
+class UpdateCustomerRequest(BaseModel):
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    debt_amount: Optional[float] = None
+    due_date: Optional[str] = None
+    status: Optional[str] = None
+    risk_level: Optional[str] = None
+
+# --- Customer CRUD Endpoints ---
+
+@app.post("/api/customers")
+async def create_customer(customer: CreateCustomerRequest):
+    """Create a new customer"""
+    supabase = get_supabase_client()
+    try:
+        # Check if phone exists
+        existing = supabase.table('customers').select("id").eq("phone", customer.phone).execute()
+        if existing.data:
+            raise HTTPException(status_code=400, detail="Customer with this phone already exists")
+
+        new_customer = customer.dict(exclude_unset=True)
+        # Add timestamps (optional, DB usually handles defaults but good to be explicit if needed)
+        # new_customer['created_at'] = datetime.now().isoformat()
+        
+        result = supabase.table('customers').insert(new_customer).execute()
+        
+        if result.data:
+            return {"success": True, "customer": result.data[0]}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to create customer")
+            
+    except Exception as e:
+        logger.error(f"Error creating customer: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/api/customers/{customer_id}")
+async def update_customer(customer_id: str, customer: UpdateCustomerRequest):
+    """Update an existing customer"""
+    supabase = get_supabase_client()
+    try:
+        updates = customer.dict(exclude_unset=True)
+        if not updates:
+            raise HTTPException(status_code=400, detail="No fields to update")
+            
+        result = supabase.table('customers').update(updates).eq("id", customer_id).execute()
+        
+        if result.data:
+            return {"success": True, "customer": result.data[0]}
+        else:
+             raise HTTPException(status_code=404, detail="Customer not found")
+             
+    except Exception as e:
+        logger.error(f"Error updating customer: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/customers/{customer_id}")
+async def delete_customer(customer_id: str):
+    """Delete a customer"""
+    supabase = get_supabase_client()
+    try:
+        result = supabase.table('customers').delete().eq("id", customer_id).execute()
+        # Supabase delete returns the deleted record
+        if result.data:
+             return {"success": True, "message": "Customer deleted"}
+        else:
+             raise HTTPException(status_code=404, detail="Customer not found")
+             
+    except Exception as e:
+        logger.error(f"Error deleting customer: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/api/customers", response_model=List[CustomerListItem])
 async def list_customers():
     """
-    Get list of all customers for dashboard display.
-    Returns customer information including debt status and last contact.
+    Fetch all customers from Supabase for the dashboard.
     """
-    logger.info("📋 Fetching all customers for dashboard")
+    logger.info("👥 Fetching customer list")
+    supabase = get_supabase_client()
     
     try:
-        # Query all customers from database
-        result = supabase.table('customers').select("*").order('due_date', desc=False).execute()
+        # Fetch all customers, ordered by updated_at desc
+        result = supabase.table('customers').select("*").order('updated_at', desc=True).execute()
         
         if not result.data:
             logger.info("No customers found")

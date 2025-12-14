@@ -113,70 +113,148 @@ function populateCustomersTable(customers) {
     }
 
     customers.forEach(customer => {
-        const row = createCustomerRow(customer);
+        const row = createCustomerRow(customer, availableAgents);
         tbody.appendChild(row);
     });
 }
 
-/**
- * Create a table row for a customer
- */
-function createCustomerRow(customer) {
-    const row = document.createElement('tr');
+// --- CRUD Functions ---
 
-    // Name
+const customerModal = new bootstrap.Modal(document.getElementById('customerModal'));
+const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+let deleteCustomerId = null;
+
+function openCreateModal() {
+    document.getElementById('customerForm').reset();
+    document.getElementById('customerId').value = '';
+    document.getElementById('customerStatus').value = 'active';
+    document.getElementById('customerRisk').value = 'medium';
+    document.getElementById('customerModalTitle').textContent = 'New Customer';
+    customerModal.show();
+}
+
+function openEditModal(customer) {
+    document.getElementById('customerId').value = customer.id;
+    document.getElementById('customerName').value = customer.name;
+    document.getElementById('customerPhone').value = customer.phone;
+    document.getElementById('customerDebt').value = customer.debt_amount;
+    document.getElementById('customerDueDate').value = customer.due_date || ''; // Handle null due_date
+    document.getElementById('customerStatus').value = customer.status;
+    document.getElementById('customerRisk').value = customer.risk_level;
+    document.getElementById('customerModalTitle').textContent = 'Edit Customer';
+    customerModal.show();
+}
+
+async function saveCustomer() {
+    const id = document.getElementById('customerId').value;
+    const customer = {
+        name: document.getElementById('customerName').value,
+        phone: document.getElementById('customerPhone').value,
+        debt_amount: parseFloat(document.getElementById('customerDebt').value),
+        due_date: document.getElementById('customerDueDate').value || null,
+        status: document.getElementById('customerStatus').value,
+        risk_level: document.getElementById('customerRisk').value
+    };
+
+    if (!customer.name || !customer.phone || isNaN(customer.debt_amount)) {
+        alert('Please fill in required fields (Name, Phone, Debt Amount)');
+        return;
+    }
+
+    try {
+        const url = id ? `${API_BASE_URL}/api/customers/${id}` : `${API_BASE_URL}/api/customers`;
+        const method = id ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(customer)
+        });
+
+        if (response.ok) {
+            customerModal.hide();
+            loadCustomers(); // Refresh list
+        } else {
+            const error = await response.json();
+            alert(`Error: ${error.detail || 'Unknown error occurred'}`);
+        }
+    } catch (e) {
+        console.error('Error saving customer:', e);
+        alert('Failed to save customer due to network error.');
+    }
+}
+
+function confirmDelete(id) {
+    deleteCustomerId = id;
+    deleteModal.show();
+}
+
+// --- Row Creation Update ---
+
+/**
+ * Creates a table row element for a customer.
+ */
+function createCustomerRow(customer, availableAgents) {
+    const row = document.createElement('tr');
+    row.className = "align-middle"; // Vertically center content
+
+    // Customer Name & Phone
     const nameCell = document.createElement('td');
-    nameCell.className = "ps-4";
+    nameCell.className = "ps-4"; // Left padding to match header
     nameCell.innerHTML = `
-        <div class="customer-name">${escapeHtml(customer.name)}</div>
-        <div class="small text-muted d-md-none">${escapeHtml(customer.phone)}</div>
+        <div class="fw-medium text-dark">${escapeHtml(customer.name)}</div>
+        <div class="text-secondary small">${formatPhoneNumber(customer.phone)}</div>
     `;
     row.appendChild(nameCell);
 
-    // Phone
-    const phoneCell = document.createElement('td');
-    phoneCell.innerHTML = `<span class="customer-phone">${escapeHtml(customer.phone)}</span>`;
-    row.appendChild(phoneCell);
+    // Contact Status (Icon + Text) - This is a new column, distinct from the main 'Status'
+    const contactStatusCell = document.createElement('td');
+    contactStatusCell.innerHTML = getContactStatusBadge(customer.status); // Helper function below
+    row.appendChild(contactStatusCell);
 
     // Debt Amount
     const debtCell = document.createElement('td');
-    debtCell.innerHTML = `<span class="debt-amount">$${customer.debt_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>`;
+    debtCell.className = "fw-medium";
+    debtCell.textContent = formatCurrency(customer.debt_amount);
     row.appendChild(debtCell);
 
-    // Status
-    const statusCell = document.createElement('td');
-    statusCell.appendChild(createStatusBadge(customer.status));
-    row.appendChild(statusCell);
+    // Status Column (The main status like 'active', 'promised_to_pay')
+    const statusTextCell = document.createElement('td');
+    statusTextCell.textContent = formatStatus(customer.status);
+    row.appendChild(statusTextCell);
 
-    // Risk Level (Re-added)
+    // Risk Column
     const riskCell = document.createElement('td');
     riskCell.appendChild(createRiskBadge(customer.risk_level));
     row.appendChild(riskCell);
 
-    // Aging / Overdue
-    const overdueCell = document.createElement('td');
-    let overdueClass = 'overdue-low';
-    if (customer.days_overdue > 30) overdueClass = 'overdue-high';
-    else if (customer.days_overdue > 7) overdueClass = 'overdue-med';
+    // Aging (Days Overdue)
+    const agingCell = document.createElement('td');
+    if (customer.due_date) {
+        const days = calculateDaysOverdue(customer.due_date);
+        agingCell.innerHTML = `<span class="${days > 30 ? 'text-danger fw-medium' : 'text-secondary'}">${days} days</span>`;
+    } else {
+        agingCell.textContent = "-";
+    }
+    row.appendChild(agingCell);
 
-    overdueCell.innerHTML = `<span class="${overdueClass}">${customer.days_overdue} days</span>`;
-    row.appendChild(overdueCell);
-
-    // Last Call
-    const lastCallCell = document.createElement('td');
-    lastCallCell.innerHTML = customer.last_call_date ?
-        `<span class="text-muted small">${formatDate(customer.last_call_date)}</span>` :
-        `<span class="text-muted small">-</span>`;
-    row.appendChild(lastCallCell);
+    // Last Action
+    const lastActionCell = document.createElement('td');
+    const lastDate = customer.last_call_date || customer.updated_at;
+    if (lastDate) {
+        lastActionCell.innerHTML = `<small class="text-secondary">${formatDate(lastDate)}</small>`;
+    } else {
+        lastActionCell.textContent = "-";
+    }
+    row.appendChild(lastActionCell);
 
     // AGENT SELECTION COLUMN
     const agentCell = document.createElement('td');
     const agentSelect = document.createElement('select');
     agentSelect.className = 'form-select form-select-sm agent-select';
-    agentSelect.id = `agent-select-${customer.id}`; // unique ID
+    agentSelect.id = `agent-select-${customer.id}`;
     agentSelect.style.width = '140px';
 
-    // Populate dropdown
     if (availableAgents.length > 0) {
         availableAgents.forEach(agent => {
             const option = document.createElement('option');
@@ -184,7 +262,10 @@ function createCustomerRow(customer) {
             option.textContent = agent.name;
             agentSelect.appendChild(option);
         });
-        // First one selected by default (browser behavior)
+        // Set selected agent if customer has one, otherwise default to first
+        if (customer.assigned_agent_id) {
+            agentSelect.value = customer.assigned_agent_id;
+        }
     } else {
         const option = document.createElement('option');
         option.textContent = "Loading...";
@@ -194,27 +275,144 @@ function createCustomerRow(customer) {
     agentCell.appendChild(agentSelect);
     row.appendChild(agentCell);
 
-    // Action Button
+    // Action Buttons (Call + Edit + Delete)
     const actionCell = document.createElement('td');
     actionCell.className = "text-end pe-4";
-    const callButton = document.createElement('button');
-    callButton.className = 'btn-call-action';
-    callButton.innerHTML = '<i class="bi bi-telephone-fill me-1"></i> Call';
 
-    // Pass the customer AND the specific selector ID to the call function
+    // Wrapper for buttons
+    const btnGroup = document.createElement('div');
+    btnGroup.className = "d-flex justify-content-end gap-2";
+
+    // Call Button
+    const callButton = document.createElement('button');
+    callButton.className = 'btn btn-sm btn-action-call d-flex align-items-center';
+    callButton.innerHTML = '<i class="bi bi-telephone-fill me-1"></i> Call';
+    callButton.title = "Inject Call";
     callButton.onclick = () => {
         const selectedAgentId = document.getElementById(`agent-select-${customer.id}`).value;
         initiateCall(customer, selectedAgentId);
     };
+    btnGroup.appendChild(callButton);
 
-    actionCell.appendChild(callButton);
+    // Edit Button
+    const editButton = document.createElement('button');
+    editButton.className = 'btn btn-sm btn-outline-secondary';
+    editButton.innerHTML = '<i class="bi bi-pencil"></i>';
+    editButton.title = "Edit";
+    editButton.onclick = () => openEditModal(customer);
+    btnGroup.appendChild(editButton);
+
+    // Delete Button
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'btn btn-sm btn-outline-danger';
+    deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
+    deleteButton.title = "Delete";
+    deleteButton.onclick = () => confirmDelete(customer.id);
+    btnGroup.appendChild(deleteButton);
+
+    actionCell.appendChild(btnGroup);
     row.appendChild(actionCell);
 
     return row;
 }
 
+// Helper to format status text nice
+function formatStatus(status) {
+    if (!status) return '-';
+    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+// Helper to format phone number
+function formatPhoneNumber(phoneNumber) {
+    if (!phoneNumber) return '';
+    // Basic formatting for 10-digit numbers
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return phoneNumber; // Return original if not 10 digits
+}
+
+// Helper to format currency
+function formatCurrency(amount) {
+    if (typeof amount !== 'number') return '-';
+    return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Helper to calculate days overdue
+function calculateDaysOverdue(dueDateString) {
+    if (!dueDateString) return 0;
+    const dueDate = new Date(dueDateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize today to start of day
+    dueDate.setHours(0, 0, 0, 0); // Normalize due date to start of day
+
+    if (dueDate >= today) {
+        return 0; // Not overdue yet
+    }
+
+    const diffTime = Math.abs(today.getTime() - dueDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+}
+
 /**
- * Create status badge
+ * Create a badge for the 'Contact Status' column
+ */
+function getContactStatusBadge(status) {
+    let iconClass = '';
+    let textClass = '';
+    let tooltip = '';
+
+    switch (status) {
+        case 'active':
+            iconClass = 'bi bi-check-circle-fill text-success';
+            textClass = 'text-success';
+            tooltip = 'Active Account';
+            break;
+        case 'promised_to_pay':
+            iconClass = 'bi bi-hourglass-split text-warning';
+            textClass = 'text-warning';
+            tooltip = 'Promised to Pay';
+            break;
+        case 'refused':
+            iconClass = 'bi bi-x-circle-fill text-danger';
+            textClass = 'text-danger';
+            tooltip = 'Refused to Pay';
+            break;
+        case 'callback_requested':
+            iconClass = 'bi bi-arrow-repeat text-info';
+            textClass = 'text-info';
+            tooltip = 'Callback Requested';
+            break;
+        case 'voicemail':
+            iconClass = 'bi bi-mic-fill text-secondary';
+            textClass = 'text-secondary';
+            tooltip = 'Left Voicemail';
+            break;
+        case 'wrong_number':
+            iconClass = 'bi bi-exclamation-triangle-fill text-muted';
+            textClass = 'text-muted';
+            tooltip = 'Wrong Number';
+            break;
+        default:
+            iconClass = 'bi bi-question-circle-fill text-muted';
+            textClass = 'text-muted';
+            tooltip = 'Unknown Status';
+            break;
+    }
+
+    return `
+        <span class="d-inline-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="${tooltip}">
+            <i class="${iconClass} me-1"></i>
+            <span class="small ${textClass}">${formatStatus(status)}</span>
+        </span>
+    `;
+}
+
+/**
+ * Create status badge (original function, used for the 'Status' column)
  */
 function createStatusBadge(status) {
     const badge = document.createElement('span');
