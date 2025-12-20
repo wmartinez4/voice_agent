@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt Collection Solution | GenuVoice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/styles.css?v=2" rel="stylesheet">
+    <style>
+        .proposal-hero {
+            background: linear-gradient(180deg, rgba(240, 244, 248, 0) 0%, rgba(240, 244, 248, 0.8) 100%);
+            padding: 60px 0;
+        }
+
+        .proposal-card {
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            transition: transform 0.3s;
+        }
+
+        .proposal-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .bg-blue-light {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .bg-teal-light {
+            background-color: #f0fdfa;
+            color: #0d9488;
+        }
+
+        .bg-indigo-light {
+            background-color: #e0e7ff;
+            color: #4338ca;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg border-bottom sticky-top bg-white">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/static/solutions_hub.html"><i
+                    class="bi bi-grid-3x3-gap-fill me-2 text-primary"></i>Solutions Hub <span
+                    class="fw-normal text-muted">| Debt Collection</span></a>
+            <div class="d-flex gap-2">
+                <a href="/static/landing.html" class="btn btn-sm btn-outline-secondary">Back to Platform</a>
+                <a href="/dashboard" class="btn btn-sm btn-primary">Try Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <!-- Header -->
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle mb-3">INTELLIGENT
+                    COLLECTIONS</span>
+                <h1 class="display-5 fw-bold mb-3">Autonomous Debt Recovery</h1>
+                <p class="lead text-secondary">
+                    Scale your collections capacity with AI agents that negotiate, empathize, and secure payments 24/7.
+                </p>
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <a href="/dashboard" class="btn btn-primary px-4 shadow-sm"><i
+                            class="bi bi-telephone-outbound me-2"></i>Launch Simulator</a>
+                    <a href="#workflow" class="btn btn-outline-dark px-4">View Logic</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card proposal-card h-100 p-4 border-0">
+                    <div class="feature-icon bg-blue-light"><i class="bi bi-graph-up-arrow"></i></div>
+                    <h5>3x Recovery Rate</h5>
+                    <p class="text-muted small mb-0">Compared to traditional SMS/Email campaigns. Voice builds trust and
+                        urgency.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card proposal-card h-100 p-4 border-0">
+                    <div class="feature-icon bg-teal-light"><i class="bi bi-clock-history"></i></div>
+                    <h5>Zero Wait Time</h5>
+                    <p class="text-muted small mb-0">Thousands of concurrent calls. Reach your entire portfolio in
+                        hours, not weeks.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card proposal-card h-100 p-4 border-0">
+                    <div class="feature-icon bg-indigo-light"><i class="bi bi-shield-lock"></i></div>
+                    <h5>Compliance First</h5>
+                    <p class="text-muted small mb-0">Strict adherence to scripted workflows. No hallucinations, full
+                        audit logs.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Agents -->
+        <div class="row mb-5 align-items-center bg-light p-5 rounded-4 mx-1">
+            <div class="col-md-5">
+                <h3 class="fw-bold mb-4">Meet Your New Team</h3>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center me-3"
+                        style="width: 60px; height: 60px; color: #0369a1; font-weight: bold; font-size: 1.5rem;">J</div>
+                    <div>
+                        <h5 class="mb-0 fw-bold">Jess (English)</h5>
+                        <p class="text-muted small mb-0">Specialist in Negotiation & Payment Plans</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center me-3"
+                        style="width: 60px; height: 60px; color: #be185d; font-weight: bold; font-size: 1.5rem;">L</div>
+                    <div>
+                        <h5 class="mb-0 fw-bold">Lina (Spanish)</h5>
+                        <p class="text-muted small mb-0">Cultural fit for Latam markets</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 border-start">
+                <h5 class="fw-bold mb-3">Core Capabilities</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Identity
+                            Verification:</strong> Confirms speaker before discussing debt.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Data
+                            Access:</strong> Retrieves real-time balance and due dates.</li>
+                    <li class="mb-2"><i
+                            class="bi bi-check-circle-fill text-success me-2"></i><strong>Negotiation:</strong> Proposes
+                        split payments or settlements (within rules).</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Outcome
+                            Logging:</strong> Updates CRM with "Promised to Pay", "Refused", etc.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Process Flow -->
+        <div id="workflow" class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm overflow-hidden rounded-4">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h5 class="mb-0 text-primary">Workflow: Payment Negotiation</h5>
+                    </div>
+                    <div class="card-body bg-light p-4 text-center">
+                        <div class="mermaid bg-white p-3 rounded border">
+                            graph TD
+                            %% Styles
+                            classDef ai fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#000
+                            classDef human fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000
+                            classDef system fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#000
+                            classDef success fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000
+                            classDef fail fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#000
+
+                            Start([Outbound Call]) --> Verify{Verify Identity?}:::human
+                            Verify -- No/Wrong Person --> EndWrong([End: Wrong Number]):::fail
+                            Verify -- Yes --> Context[Explain: Past Due Balance]:::ai
+
+                            Context --> Intent{Can you pay?}:::human
+                            Intent -- Yes --> Collect[Collect Payment / Card Info]:::ai
+                            Intent -- No/Can't --> Negotiate[Propose Payment Plan]:::ai
+
+                            Negotiate --> Agree{Accept Plan?}:::human
+                            Agree -- Yes --> Confirm[Confirm Dates & Amounts]:::ai
+                            Agree -- No --> Hardship[Log Hardship / Escalate]:::ai
+
+                            Collect --> EndSuccess([SUCCESS: Payment Secured]):::success
+                            Confirm --> EndSuccess
+
+                            Hardship --> EndFail([End: Callback Requested]):::system
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Models -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 text-center">
+                <h3 class="fw-bold mb-4">Pricing Models</h3>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-primary shadow-sm" style="border-width: 2px;">
+                    <div class="card-header bg-primary text-white py-3 text-center">
+                        <h5 class="mb-0">Performance Based</h5>
+                        <span class="badge bg-white text-primary mt-2">Zero Risk</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <h2 class="display-6 fw-bold text-center mb-4">20% <small class="text-muted fs-6">of collected
+                                amount</small></h2>
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item">No Setup Fee</li>
+                            <li class="list-group-item">No Monthly License</li>
+                            <li class="list-group-item">Unlimited Calls</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-light py-3 text-center">
+                        <h5 class="mb-0">Enterprise License</h5>
+                        <span class="badge bg-secondary mt-2">High Volume</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <h2 class="display-6 fw-bold text-center mb-4">$0.25 <small class="text-muted fs-6">per
+                                minute</small></h2>
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item">$5,000 Setup Fee</li>
+                            <li class="list-group-item">Full CRM Integration</li>
+                            <li class="list-group-item">Custom Voice Cloning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-light py-4 border-top">
+        <div class="container text-center text-muted small">
+            &copy; 2025 GenuVoice Platform.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+
+</html>

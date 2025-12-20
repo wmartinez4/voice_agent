@@ -4,176 +4,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenuVoice - Intelligent Debt Recovery</title>
+    <title>GenuVoice Platform | Enterprise Voice AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/styles.css?v=2" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: #ffffff;
+            position: relative;
+            overflow: hidden;
+            padding-top: 120px;
+            padding-bottom: 100px;
+        }
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet">
+        .hero-bg-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-image:
+                radial-gradient(at 80% 0%, rgba(99, 91, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, rgba(0, 212, 255, 0.05) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, rgba(255, 0, 128, 0.03) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(255, 100, 100, 0.05) 0px, transparent 50%);
+        }
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        .hero-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(to bottom right, #635BFF, #8C87FF);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            opacity: 0.04;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/landing.css">
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .display-3 {
+            letter-spacing: -0.03em;
+            color: #0A2540;
+            font-weight: 800;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container navbar-container"
-            style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 24px;">
-            <a href="#" class="logo">
-                <i class="bi bi-soundwave"></i> GenuVoice
-            </a>
-            <div class="nav-links">
-                <a href="#features" class="nav-item">Product</a>
-                <a href="#how-it-works" class="nav-item">Solutions</a>
-                <a href="#developers" class="nav-item">Developers</a>
-                <a href="/dashboard" class="btn btn-secondary" style="margin-left: 20px;">Sign in</a>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-soundwave text-primary me-2"></i>GenuVoice <span
+                    class="badge badge-beta ms-2" style="font-size: 0.6rem; vertical-align: top;">PLATFORM</span></a>
+            <div class="d-flex gap-2">
+                <a href="/static/solutions_hub.html" class="btn btn-sm btn-ghost-primary">Solutions</a>
+                <a href="/dashboard" class="btn btn-sm btn-primary rounded-pill">Login / Demo</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background-graphic"></div>
-
-        <div class="container hero-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-            <div class="hero-content">
-                <h1>Financial infrastructure <br>for debt recovery.</h1>
-                <p class="hero-subtitle">
-                    GenuVoice provides the API primitives and autonomous agents that platforms need to recover revenue
-                    with empathy and precision.
-                </p>
-                <div class="hero-buttons">
-                    <a href="/dashboard" class="btn btn-primary">Start now <i class="bi bi-arrow-right"></i></a>
-                    <a href="#contact" class="btn btn-secondary">Contact sales</a>
-                </div>
-            </div>
-
-            <div class="hero-visual">
-                <div class="app-card">
-                    <div class="card-header-clean">
-                        <div style="font-weight: 600; font-size: 0.95rem;">Active Interaction</div>
-                        <div class="agent-status"><span class="status-dot"></span> Jess (AI)</div>
-                    </div>
-
-                    <div class="dialogue">
-                        <div class="bubble agent">
-                            Hi, this is Jess from GenuVoice. Am I speaking with the account holder regarding the invoice
-                            #INV-2024?
-                        </div>
-                        <div class="bubble user">
-                            Yes, that's me. I completely forgot about that one.
-                        </div>
-                        <div class="bubble agent">
-                            No problem at all. We can split the <strong>$1,250</strong> balance into three monthly
-                            installments of <strong>$416</strong> starting today. Would that work for you?
-                        </div>
-                    </div>
-
-                    <div
-                        style="margin-top: 30px; border-top: 1px solid #F1F5F9; padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #64748B; font-size: 0.85rem;">Payment Link Generated</span>
-                        <span style="color: #635BFF; font-weight: 600; font-size: 0.9rem;">stripe.com/pay/xv9...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-            <div class="features-header">
-                <span class="caps-label">Unified Platform</span>
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Everything you need to recover revenue</h2>
-                <p style="color: #4F566B; font-size: 1.1rem;">A complete financial stack for debt collection, identity
-                    verification, and payment processing.</p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="bi bi-globe"></i></div>
-                    <h3>Global Scale</h3>
-                    <p style="color: #4F566B; margin-top: 12px;">Accept payments and recover debt in 135+ currencies
-                        with local compliance built-in.</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="bi bi-robot"></i></div>
-                    <h3>Neural Agents</h3>
-                    <p style="color: #4F566B; margin-top: 12px;">Our voice models are trained on millions of financial
-                        conversations to negotiate effectively.</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
-                    <h3>Bank-Grade Security</h3>
-                    <p style="color: #4F566B; margin-top: 12px;">SOC2, HIPAA, and GDPR readiness. We encrypt all
-                        sensitive data at rest and in transit.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Developers Section -->
-    <section id="developers" class="code-section">
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-            <div class="hero-container">
-                <!-- Reusing grid layout -->
-                <div class="text-content">
-                    <span class="caps-label">Developers First</span>
-                    <h2 style="font-size: 2.5rem; margin-bottom: 24px;">Designed for the modern stack</h2>
-                    <p style="color: #4F566B; font-size: 1.1rem; margin-bottom: 32px;">
-                        Integrate autonomous recovery in minutes, not months. Our API is typed, documented, and
-                        idempotent.
+    <header class="hero-section">
+        <div class="hero-bg-gradient"></div>
+        <div class="hero-stripe"></div>
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span
+                        class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 mb-4 px-3 py-2 rounded-pill fw-bold"
+                        style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                        🚀 THE FUTURE OF CUSTOMER CONTACT
+                    </span>
+                    <h1 class="display-3 mb-4">Autonomous Voice Agents that <span style="color: #635BFF">Drive
+                            Revenue</span>.</h1>
+                    <p class="lead text-muted mb-5" style="font-size: 1.25rem;">
+                        Deploy intelligent agents for Debt Collection, Retention, and Customer Service.
+                        Zero wait times, infinite scale, and perfect compliance.
                     </p>
-                    <a href="#" class="btn btn-secondary">Read the API docs</a>
+                    <div class="d-flex gap-3">
+                        <a href="/static/solutions_hub.html"
+                            class="btn btn-primary btn-lg px-5 shadow-lg rounded-pill"><i
+                                class="bi bi-grid-3x3-gap-fill me-2"></i>Explore Solutions</a>
+                        <a href="/dashboard" class="btn btn-ghost-primary btn-lg px-4 rounded-pill"><i
+                                class="bi bi-play-circle me-2"></i>Live Simulator</a>
+                    </div>
                 </div>
-                <div class="code-content">
-                    <div class="code-block">
-                        <div style="margin-bottom: 20px; color: #635BFF;">// Initialize Recovery Session</div>
-                        <pre style="margin: 0;"><code>
-const session = await genuvoice.campaigns.create({
-  customer: 'cus_8823',
-  strategy: 'empathetic_retention',
-  rules: {
-    max_discount: 0.15,
-    installments_allowed: true
-  }
-});
-
-console.log(session.status); // 'active'
-                        </code></pre>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <!-- Hero Image / Visual -->
+                    <div class="card bg-white border-0 shadow-lg p-3 rounded-4"
+                        style="transform: rotate(-2deg) scale(0.95);">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                                    <i class="bi bi-mic-fill text-primary fs-4"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 text-dark fw-bold">Active Call: Jess</h5>
+                                    <small class="text-secondary fw-semibold">Negotiating Payment Plan...</small>
+                                </div>
+                                <span class="ms-auto badge bg-success text-white px-3 py-2 rounded-pill">Live</span>
+                            </div>
+                            <div class="bg-light p-4 rounded-4 mb-3">
+                                <small class="text-secondary fw-medium">"I understand times are tough. Would splitting
+                                    the
+                                    balance into three monthly payments help you get back on track?"</small>
+                            </div>
+                            <div class="bg-primary p-4 rounded-4 text-end text-white shadow-sm"
+                                style="background: #635BFF;">
+                                <small class="fw-medium">"Yes, that actually sounds manageable. Thank
+                                    you."</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <h4 style="margin-bottom: 16px;">GenuVoice</h4>
-                    <p style="color: #64748B; font-size: 0.9rem;">© 2025 GenuVoice Inc.</p>
-                </div>
-                <div style="display: flex; gap: 40px;">
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <span style="font-weight: 600; font-size: 0.9rem;">Product</span>
-                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">Payments</a>
-                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">Billing</a>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <span style="font-weight: 600; font-size: 0.9rem;">Company</span>
-                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">About</a>
-                        <a href="#" style="color: #64748B; text-decoration: none; font-size: 0.9rem;">Customers</a>
-                    </div>
-                </div>
-            </div>
+    <footer class="bg-dark text-white py-5 border-top border-secondary">
+        <div class="container text-center text-secondary">
+            <p class="mb-0">&copy; 2025 GenuVoice Platform. Enterprise AI Solutions.</p>
         </div>
     </footer>
 </body>

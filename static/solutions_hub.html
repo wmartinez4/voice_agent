@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenuVoice Platform | AI Agent Solutions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/styles.css?v=2" rel="stylesheet">
+    <style>
+        .hub-hero {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .solution-card {
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35em 0.8em;
+            border-radius: 20px;
+        }
+
+        .bg-active {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .bg-beta {
+            background-color: #fefce8;
+            color: #854d0e;
+        }
+
+        .bg-planned {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        .agent-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.25rem;
+        }
+
+        .avatar-jess {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .avatar-lina {
+            background-color: #fce7f3;
+            color: #be185d;
+        }
+
+        .avatar-sofia {
+            background-color: #f0fdf4;
+            color: #15803d;
+        }
+
+        .avatar-maria {
+            background-color: #fff7ed;
+            color: #c2410c;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-white border-bottom">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/dashboard"><i class="bi bi-soundwave text-primary me-2"></i>GenuVoice
+                <span class="badge bg-primary ms-2" style="font-size: 0.6rem; vertical-align: top;">PLATFORM</span></a>
+            <div class="d-flex">
+                <a href="/dashboard" class="btn btn-sm btn-outline-secondary">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hub-hero mb-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">Intelligent Voice Solutions</h1>
+            <p class="lead text-light opacity-75 mb-0 system-font">Specialized AI Agents for every stage of the customer
+                lifecycle.</p>
+        </div>
+    </header>
+
+    <main class="container mb-5">
+        <h3 class="fw-bold mb-4 text-secondary">Available Solutions</h3>
+
+        <div class="row g-4">
+
+            <!-- 1. Debt Collection -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card solution-card p-4 border-0 shadow-sm">
+                    <span class="status-badge bg-active">ACTIVE</span>
+                    <div class="card-icon bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Debt Collection</h5>
+                    <p class="text-muted small mb-4">Empathetic negotiation for overdue payments. Secures promises to
+                        pay and installment plans.</p>
+
+                    <div class="mb-4">
+                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Agents:</small>
+                        <div class="d-flex mt-2">
+                            <div class="agent-avatar avatar-jess" title="Jess (English)">J</div>
+                            <div class="agent-avatar avatar-lina" title="Lina (Spanish)">L</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="/static/proposal_debt.html" class="btn btn-outline-primary btn-sm w-100 mb-2">View
+                            Proposal</a>
+                        <a href="/static/documents/AgentVoiceFlow_POC.md" class="btn btn-sm btn-light text-muted w-100"
+                            target="_blank">Technical Flow</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Recovery / Auto-Renew -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card solution-card p-4 border-0 shadow-sm relative">
+                    <span class="status-badge bg-active">ACTIVE</span> <!-- Now active -->
+                    <div class="card-icon bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Retention & Recovery</h5>
+                    <p class="text-muted small mb-4">Proactive outreach for "Auto-Renew False" policies. Prevents churn
+                        before it happens.</p>
+
+                    <div class="mb-4">
+                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Agents:</small>
+                        <div class="d-flex mt-2">
+                            <div class="agent-avatar avatar-sofia" title="Sofia (English)">S</div>
+                            <div class="agent-avatar avatar-maria" title="Maria (Spanish)">M</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="/static/proposal.html" class="btn btn-success btn-sm w-100 mb-2 shadow-sm">View
+                            Proposal</a>
+                        <a href="/static/documents/AgentVoiceFlow_Recovery.md"
+                            class="btn btn-outline-success btn-sm w-100">Workflow</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Payment Data Update -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card solution-card p-4 border-0 bg-light">
+                    <span class="status-badge bg-planned">PLANNED</span>
+                    <div class="card-icon bg-secondary bg-opacity-10 text-secondary">
+                        <i class="bi bi-credit-card-2-front"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2 text-secondary">Payment Update</h5>
+                    <p class="text-muted small mb-4">Securely updates expired credit cards to prevent involuntary
+                        cancellations.</p>
+
+                    <div class="mt-auto pt-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100" disabled>Coming Q1 2026</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Satisfaction Survey -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card solution-card p-4 border-0 bg-light">
+                    <span class="status-badge bg-planned">PLANNED</span>
+                    <div class="card-icon bg-warning bg-opacity-10 text-warning">
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2 text-secondary">Satisfaction Survey</h5>
+                    <p class="text-muted small mb-4">Post-interaction feedback collection (NPS/CSAT) to measure service
+                        quality.</p>
+
+                    <div class="mt-auto pt-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100" disabled>Coming Q1 2026</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-light py-5 border-top mt-5">
+        <div class="container text-center">
+            <p class="text-muted small mb-0">&copy; 2025 GenuVoice Platform. Powered by LLM Integration.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
