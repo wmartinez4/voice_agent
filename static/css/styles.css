@@ -395,3 +395,56 @@ h5 {
     cursor: pointer;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 16px;
+    }
+
+    .navbar .container {
+        flex-wrap: nowrap;
+        /* Prevent wrapping */
+        gap: 8px;
+    }
+
+    .navbar-brand {
+        font-size: 1.1rem;
+        margin-right: auto;
+        /* Push buttons to right */
+    }
+
+    .navbar-brand i {
+        font-size: 1.1rem;
+    }
+
+    .badge-beta {
+        display: none;
+        /* Hide 'PLATFORM' badge on small mobile to save space */
+    }
+
+    .display-3 {
+        font-size: 2.5rem;
+        /* Smaller hero title */
+        line-height: 1.1;
+    }
+
+    .hero-section {
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+
+    .lead {
+        font-size: 1.1rem !important;
+    }
+
+    /* Stack buttons on mobile but keep full width */
+    .hero-content .d-flex {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-content .btn {
+        width: 100%;
+    }
+}
