@@ -13,7 +13,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY main.py database.py ./
+# Copy application code
+COPY *.py *.txt ./
 COPY static ./static
 
 # Create logs directory
